@@ -1,0 +1,134 @@
+@CHARSET "UTF-8";
+#blogTop {
+	font-size: bold;
+	font-size: 54px;
+	text-align: center;
+	display: table-cell;
+    vertical-align: middle ;
+	background-color: #FFFFCE;
+	border-style: solid;
+	border-color: #ECECFF;
+	height: 100px;
+	font-family:"Lucida Console", Monaco, monospace;
+}
+
+*{padding: 0;margin: 0;box-sizing:border-box;}
+li{
+	list-style: none;
+	float: left;
+}
+
+ul img {
+	height: 280px;
+	width: 280px;
+}
+
+.container{
+	height: 280px;
+	width: 280px;
+	margin: 50px auto 0;
+	overflow: hidden;
+	position: relative;
+	/*border: 1px solid black;*/
+}
+
+ol{
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	padding: 10px;
+	margin-left: -70px;
+	z-index: 999;
+}
+
+ol li{
+	width: 10px;
+	height: 10px;
+	background-color: #fff;
+	border: 1px solid red;
+	border-radius: 50%;
+	margin: 0 5px;
+}
+
+.container ul{
+       animation:Mymove 14s infinite 2s;
+       /*animation-duration:2s;*/
+       width: 800%;
+}
+@keyframes Mymove{
+      0% {
+        transform: translateX(0px);
+      }
+      14% {
+        transform: translateX(-280px);
+      }
+      28% {
+        transform: translateX(-560px);
+      }
+      43% {
+        transform: translateX(-840px);
+      }
+      57% {
+        transform: translateX(-1120px);
+      }
+      71% {
+        transform: translateX(-1400px);
+      }
+      85% {
+        transform: translateX(-1680px);
+      }
+      100% {
+        transform: translateX(0px);
+      }
+}
+
+ol li {
+  animation:focus 14s linear infinite ;//时间要和图片保持一致
+  }
+  ol li:nth-child(1) {
+    animation-delay: 0s;
+  }
+  ol li:nth-child(2) {
+    animation-delay: 2s;
+  }
+  ol li:nth-child(3) {
+    animation-delay: 4s;
+  }
+  ol li:nth-child(4) {
+    animation-delay: 6s;
+  }
+  ol li:nth-child(5) {
+    animation-delay: 8s;
+  }
+  ol li:nth-child(6) {
+    animation-delay: 10s;
+  }
+  ol li:nth-child(7) {
+    animation-delay: 12s;
+  }
+  @keyframes focus {
+    0% { 
+      	background-color: #000;
+    }
+    14% {
+        background-color: #fff;
+    }
+    28% {
+        background-color: #fff;
+    }
+    43% {
+        background-color: #fff;
+    }
+    57% {
+        background-color: #fff;
+    }
+    71% {
+        background-color: #fff;
+    }
+    85% {
+        background-color: #fff;
+    }
+    to {
+        background-color: #fff;
+    }
+  }
