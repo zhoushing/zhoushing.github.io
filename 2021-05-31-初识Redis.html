@@ -5,7 +5,7 @@
 <meta property="og:site_name" content="ZH&#39;Blog">
 <meta property="og:description" content="引入Nosql基本概念NoSQL最常见的解释是“non-relational”， “Not Only SQL”也被很多人接受。NoSQL仅仅是一个概念，泛指非关系型的数据库，区别于关系数据库，它们不保证关系数据的ACID特性。 它不能替代关系型数据库，只能作为关系型数据库的一个良好补充。 优点：  易扩展 高性能 大数据量、高性能 高可用  Nosql 分类不同分类特点对比：    分类 Exam">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png">
+<meta property="og:image" content="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png">
 <meta property="article:published_time" content="2021-05-31T11:59:48.000Z">
 <meta property="article:modified_time" content="2021-07-22T09:00:15.962Z">
 <meta property="article:author" content="Marx">
@@ -13,13 +13,13 @@
 <meta property="article:tag" content="NoSQL">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zhoushing.github.io/2021-05-31-%E5%88%9D%E8%AF%86Redis"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zhoushing.github.io/2021-05-31-%E5%88%9D%E8%AF%86Redis"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: {"appId":"NCGFY61Z1J","apiKey":"e4ef7b08b5cd88413ca63b2c0ac5ea59","indexName":"index","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
   localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
   noticeOutdate: undefined,
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
   copy: {
     success: '复制成功',
     error: '复制错误',
@@ -54,7 +54,8 @@
   isPhotoFigcaption: false,
   islazyload: true,
   isanchor: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '初识Redis',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
@@ -146,8 +147,15 @@
     if (fontSizeVal !== undefined) {
       document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
     }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
     })(window)</script><meta name="baidu-site-verification" content="code-APKE7ohZMo" /><meta name="msvalidate.01" content="522157A5A4BBF9EF58B23495EF8A7C5A" /><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="ZH'Blog" type="application/atom+xml">
-</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/img/head.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">146</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">62</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">ZH'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">初识Redis</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-31T11:59:48.000Z" title="发表于 2021-05-31 19:59:48">2021-05-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-22T09:00:15.962Z" title="更新于 2021-07-22 17:00:15">2021-07-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%9D%E8%AF%86%E7%B3%BB%E5%88%97/">初识系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><h3 id="Nosql"><a href="#Nosql" class="headerlink" title="Nosql"></a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/NoSQL/8828247?fr=aladdin">Nosql</a></h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>NoSQL最常见的解释是“non-relational”， “Not Only SQL”也被很多人接受。NoSQL仅仅是一个概念，泛指非关系型的数据库，区别于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/1237340">关系数据库</a>，它们不保证关系数据的ACID特性。</p>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="/img/head.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">146</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">62</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E9%9F%B3%E4%B9%90"><i class="fa-fw /music/"></i><span> 0</span></a></li><li><a class="site-page child" href="/%E7%85%A7%E7%89%87"><i class="fa-fw /Gallery/"></i><span> 1</span></a></li><li><a class="site-page child" href="/%E7%94%B5%E5%BD%B1"><i class="fa-fw /movies/"></i><span> 2</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">ZH'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/%E9%9F%B3%E4%B9%90"><i class="fa-fw /music/"></i><span> 0</span></a></li><li><a class="site-page child" href="/%E7%85%A7%E7%89%87"><i class="fa-fw /Gallery/"></i><span> 1</span></a></li><li><a class="site-page child" href="/%E7%94%B5%E5%BD%B1"><i class="fa-fw /movies/"></i><span> 2</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">初识Redis</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-31T11:59:48.000Z" title="发表于 2021-05-31 19:59:48">2021-05-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-22T09:00:15.962Z" title="更新于 2021-07-22 17:00:15">2021-07-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%9D%E8%AF%86%E7%B3%BB%E5%88%97/">初识系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="初识Redis"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><h3 id="Nosql"><a href="#Nosql" class="headerlink" title="Nosql"></a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/NoSQL/8828247?fr=aladdin">Nosql</a></h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>NoSQL最常见的解释是“non-relational”， “Not Only SQL”也被很多人接受。NoSQL仅仅是一个概念，泛指非关系型的数据库，区别于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/1237340">关系数据库</a>，它们不保证关系数据的ACID特性。</p>
 <p>它不能替代关系型数据库，只能作为关系型数据库的一个良好补充。</p>
 <p>优点：</p>
 <ul>
@@ -232,62 +240,62 @@
 <li><p>测试redis,通过cd到我们解压的目录,输入指令通过Set get指令查看是否成功</p>
 </li>
 </ol>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/HG1PCxAS4WBzOQ3.png" alt="image-20210531205603824"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/HG1PCxAS4WBzOQ3.png" alt="image-20210531205603824"></p>
 <h2 id="Redis常用的指令"><a href="#Redis常用的指令" class="headerlink" title="Redis常用的指令"></a>Redis常用的指令</h2><p>卸载服务：<code>redis-server --service-uninstall</code><br>开启服务：<code>redis-server --service-start</code><br>停止服务：<code>redis-server --service-stop</code></p>
 <h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="String-类型"><a href="#String-类型" class="headerlink" title="String 类型"></a>String 类型</h3><p>字符串是一种最基本、最常用的 Redis 值类型。</p>
 <p>Redis 字符串是二进制安全的，这意味着一个 Redis 字符串能包含任意类型的数据</p>
 <ul>
 <li>赋值 set key value</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set a 123</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set a 123</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>取值 get key</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">get a</span><br><span class="line">结果 &quot;123&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">get a</span><br><span class="line">结果 &quot;123&quot;</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/OyLowCiNlMtdDEc.png" alt="image-20210531211024477"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/OyLowCiNlMtdDEc.png" alt="image-20210531211024477"></p>
 <ul>
 <li>取值并赋值 getset key value</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getset a 321</span><br><span class="line">&quot;123&quot;</span><br><span class="line">get a</span><br><span class="line">&quot;321&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getset a 321</span><br><span class="line">&quot;123&quot;</span><br><span class="line">get a</span><br><span class="line">&quot;321&quot;</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/7ni54wSAeTKrq1M.png" alt="image-20210531211135272"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/7ni54wSAeTKrq1M.png" alt="image-20210531211135272"></p>
 <ul>
 <li>设置获取多个键值 mset key value [key value…] mget key [key…]</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mset a 1 b 2</span><br><span class="line">OK</span><br><span class="line">mget a b</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mset a 1 b 2</span><br><span class="line">OK</span><br><span class="line">mget a b</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/Dv1a5XjhyPcHM4Y.png" alt="image-20210531211328319"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/Dv1a5XjhyPcHM4Y.png" alt="image-20210531211328319"></p>
 <ul>
 <li>删除 del key</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del a</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del a</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/DFsYzco5paguGOk.png" alt="image-20210531211359135"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/DFsYzco5paguGOk.png" alt="image-20210531211359135"></p>
 <ul>
 <li><p>递增数字 当存储的字符串是整数时，Redis提供了一个实用的命令incr，其作用是让当前键值递增，并返回递增后的值。 </p>
 <p>语法：incr key</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set num 1</span><br><span class="line">incr num</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set num 1</span><br><span class="line">incr num</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/svGcVhzkJ8Y3Hja.png" alt="image-20210531211849188"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/svGcVhzkJ8Y3Hja.png" alt="image-20210531211849188"></p>
 </li>
 <li><p>增加指定的整数 incrby key increment</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incrby num 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incrby num 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/5DaEiMIq1XWouSg.png" alt="image-20210531211957366"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/5DaEiMIq1XWouSg.png" alt="image-20210531211957366"></p>
 </li>
 <li><p>递减数值 decr key</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decr num</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decr num</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/UMfDJsdSzthNmTj.png" alt="image-20210531212050655"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/UMfDJsdSzthNmTj.png" alt="image-20210531212050655"></p>
 </li>
 <li><p>减少指定的数值 decryby key decrement</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decrby num 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decrby num 2</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/JrQYud74TjKnxZ9.png" alt="image-20210531212114636"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/JrQYud74TjKnxZ9.png" alt="image-20210531212114636"></p>
 <ul>
 <li><p>向尾部追加值 append的作用是向键值的末尾追加value。</p>
 <p>如果键不存在则将该键的值设置为value，即相当于 SET key value。</p>
@@ -295,17 +303,17 @@
 <p>语法：append key value</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set str hello</span><br><span class="line">append str &quot;world&quot;</span><br><span class="line">get str</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set str hello</span><br><span class="line">append str &quot;world&quot;</span><br><span class="line">get str</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/597AIOiZBMY24KJ.png" alt="image-20210531212521021"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/597AIOiZBMY24KJ.png" alt="image-20210531212521021"></p>
 <ul>
 <li><p>获取字符串长度 STRLEN命令返回键值的长度，如果键不存在则返回0。 </p>
 <p>语法：strlen key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strlen str</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strlen str</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/zbmVrEA2ftIpH3Q.png" alt="image-20210531212705769"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/zbmVrEA2ftIpH3Q.png" alt="image-20210531212705769"></p>
 <h3 id="List-类型"><a href="#List-类型" class="headerlink" title="List 类型"></a>List 类型</h3><p>Redis的list是采用来链表来存储的，所以对于redis的list数据类型的操作，是操作list的两端数据来操作的。</p>
 <h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>向列表两端增加元素</p>
 <ul>
@@ -313,25 +321,25 @@
 <p>语法：lpush key value [value…]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lpush list:1 1 2 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lpush list:1 1 2 3</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/xibj7yJwcPQMnug.png" alt="image-20210531213009353"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/xibj7yJwcPQMnug.png" alt="image-20210531213009353"></p>
 <ul>
 <li><p>向列表后面增加元素 </p>
 <p>语法：rpush key value [value…]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpush list:1 4 5 6</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpush list:1 4 5 6</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/7Oj8vpWtLRnuDdS.png" alt="image-20210531213107294"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/7Oj8vpWtLRnuDdS.png" alt="image-20210531213107294"></p>
 <ul>
 <li><p>查看列表 LRANGE命令是列表类型最常用的命令之一，获取列表中的某一片段，将返回start、stop之间的所有元素（包含两端的元素），索引从0开始。索引可以是负数，如：“-1”代表最后边的一个元素。</p>
 <p>语法：lrange key start stop</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lrange list:1 0 2</span><br><span class="line">lrange list:1 0 -1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lrange list:1 0 2</span><br><span class="line">lrange list:1 0 -1</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/ijV3aRzwFBhAoHq.png" alt="image-20210531213223845"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/ijV3aRzwFBhAoHq.png" alt="image-20210531213223845"></p>
 <ul>
 <li><p>从列表两端弹出元素 LPOP命令从列表左边弹出一个元素，会分两步完成：</p>
 <ul>
@@ -340,19 +348,19 @@
 </li>
 <li><p>第二步是返回被移除的元素值。 </p>
 <p>  语法： lpop key rpop key</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lpop list:1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lpop list:1</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/pWmKont8OY1VT9H.png" alt="image-20210531213739927"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/pWmKont8OY1VT9H.png" alt="image-20210531213739927"></p>
 <ul>
 <li><p>获取列表中元素的个数 </p>
 <p>语法：llen key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llen list:1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llen list:1</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/OIwhTKFsvUgdP27.png" alt="image-20210531213936234"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/OIwhTKFsvUgdP27.png" alt="image-20210531213936234"></p>
 <ul>
 <li><p>删除列表中指定的值 LREM命令会删除列表中前count个值为value的元素，返回实际删除的元素个数。根据count值的不同，该命令的执行方式会有所不同：</p>
 <ul>
@@ -363,9 +371,9 @@
 <p>语法：lrem key count value</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lrem list:1 1 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lrem list:1 1 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/osxgjv7QrbVy9OX.png" alt="image-20210531214505140"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/osxgjv7QrbVy9OX.png" alt="image-20210531214505140"></p>
 <ul>
 <li><p>获得/设置指定索引的元素值</p>
 <ul>
@@ -373,41 +381,41 @@
 <p>语法：lindex key index</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lindex list:1 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lindex list:1 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/GOzHovuBXTt1LI6.png" alt="image-20210531215418446"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/GOzHovuBXTt1LI6.png" alt="image-20210531215418446"></p>
 <ul>
 <li><p>设置指定索引的元素值 </p>
 <p>语法：lset key index value</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lset list:1 2 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lset list:1 2 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/hkrUgdVlZPQwp35.png" alt="image-20210531215510782"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/hkrUgdVlZPQwp35.png" alt="image-20210531215510782"></p>
 </li>
 <li><p>只保留列表指定片段 指定范围和 lrange 一致 </p>
 <p>语法：ltrim key start stop</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ltrim list:1 0 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ltrim list:1 0 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/fMFOrVlJvpDzU9y.png" alt="image-20210531215703029"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/fMFOrVlJvpDzU9y.png" alt="image-20210531215703029"></p>
 <ul>
 <li><p>向列表中插入元素 该命令首先会在列表中从左到右查找值为pivot的元素，然后根据第二个参数是before还是after来决定将value插入到该元素的前面还是后面。 </p>
 <p>语法：linsert key before | after pivot value</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linsert list:1 after 1 9</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linsert list:1 after 1 9</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/ykRI93gFZ4W27MC.png" alt="image-20210531220104565"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/ykRI93gFZ4W27MC.png" alt="image-20210531220104565"></p>
 <ul>
 <li>将元素从一个列表转移到另一个列表 语法：rpoplpush source destination</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpoplpush list:1 newlist</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpoplpush list:1 newlist</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/05/31/ldHItW7E3Oj2k5u.png" alt="image-20210531220546553"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/05/31/ldHItW7E3Oj2k5u.png" alt="image-20210531220546553"></p>
 <h3 id="Hash-散列类型"><a href="#Hash-散列类型" class="headerlink" title="Hash 散列类型"></a>Hash 散列类型</h3><h4 id="使用-string-的问题"><a href="#使用-string-的问题" class="headerlink" title="使用 string 的问题"></a>使用 string 的问题</h4><h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Hash/390310?fromtitle=%E6%95%A3%E5%88%97&fromid=9939480&fr=aladdin">hash</a>叫散列类型，它提供了字段和字段值的映射。字段值只能是字符串类型，不支持散列类型、集合类型等其它类型。如下：</p>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/omFXKS64M1lVCeY.png" alt="image-20210601160132684"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/omFXKS64M1lVCeY.png" alt="image-20210601160132684"></p>
 <blockquote>
 <p>注意：图中字段是按字母出现顺序排序的，但是在散列存储中，是没有顺序的</p>
 </blockquote>
@@ -416,65 +424,65 @@
 <ul>
 <li>一次只设置一个字段值 语法：hset key field value</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hset dict H 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hset dict H 1</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/mebxEypOqfuTWVi.png" alt="image-20210601160354741"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/mebxEypOqfuTWVi.png" alt="image-20210601160354741"></p>
 <ul>
 <li>一次设置多个字段值 语法：hmset key field value [field value…]</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hmset dict e 1 l 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hmset dict e 1 l 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/mzwxFdvrpgk351J.png" alt="image-20210601160506121"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/mzwxFdvrpgk351J.png" alt="image-20210601160506121"></p>
 <ul>
 <li>当字段不存在时赋值，类似hset,区别在于如果字段存在，该命令不执行任何操作。 语法：hsetnx key field value</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hsetnx dict o 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hsetnx dict o 1</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/dHGkI7v3F9xtuN8.png" alt="image-20210601160633018"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/dHGkI7v3F9xtuN8.png" alt="image-20210601160633018"></p>
 </li>
 <li><p>取值</p>
 <ul>
 <li>一次获取一个字段值 语法：hget key field</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hget dict H</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hget dict H</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/FQ5drH27ykR4ne6.png" alt="image-20210601160746852"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/FQ5drH27ykR4ne6.png" alt="image-20210601160746852"></p>
 <ul>
 <li>一次可以获取多个字段值 语法：hmget key field [field…]</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hmget dict e l</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hmget dict e l</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/2RDVHLx4t1EBOKu.png" alt="image-20210601160831409"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/2RDVHLx4t1EBOKu.png" alt="image-20210601160831409"></p>
 <ul>
 <li>获取所有字段值 语法：hgetall key</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hgetall dict</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hgetall dict</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/4gw7oOexVBIGl3z.png" alt="image-20210601160921571"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/4gw7oOexVBIGl3z.png" alt="image-20210601160921571"></p>
 </li>
 <li><p>删除字段 可以删除一个或多个字段，返回值是被删除的字段的个数。</p>
 <p> 语法：hdel key field [field…]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdel dict H</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdel dict H</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/ElWdmRpGjS4gvfM.png" alt="image-20210601161209066"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/ElWdmRpGjS4gvfM.png" alt="image-20210601161209066"></p>
 <ul>
 <li><p>增加数字 </p>
 <p>语法：hincrby key field increment</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hincrby dict H 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hincrby dict H 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/7YiQxLPSTjWqan4.png" alt="image-20210601161302659"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/7YiQxLPSTjWqan4.png" alt="image-20210601161302659"></p>
 <ul>
 <li><p>判断字段是否存在 </p>
 <p>语法：hexists key field</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexists dict H</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexists dict H</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/ocpiW5qVSJNFBdn.png" alt="image-20210601161400178"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/ocpiW5qVSJNFBdn.png" alt="image-20210601161400178"></p>
 <ul>
 <li><p>获取字段名</p>
 <p>语法： hkeys key </p>
@@ -483,17 +491,17 @@
 <p>语法： hvals key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hkeys dict</span><br><span class="line">hvals dict</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hkeys dict</span><br><span class="line">hvals dict</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/pgcJXs9lDSKUR5w.png" alt="image-20210601162009254"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/pgcJXs9lDSKUR5w.png" alt="image-20210601162009254"></p>
 <ul>
 <li><p>获取字段数量 </p>
 <p>语法：hlen key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hlen dict</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hlen dict</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/Is3rU1fkADcxt6h.png" alt="image-20210601162150172"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/Is3rU1fkADcxt6h.png" alt="image-20210601162150172"></p>
 <h3 id="Set-类型"><a href="#Set-类型" class="headerlink" title="Set 类型"></a>Set 类型</h3><blockquote>
 <p>集合(Set)类型：无序、不可重复 </p>
 <p>列表(List)类型：有序、可重复</p>
@@ -503,69 +511,69 @@
 <p>语法：sadd key member [member…]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sadd set a b c</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sadd set a b c</span><br></pre></td></tr></table></figure>
 
 <p>​        语法：srem key member [member…]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srem set c</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srem set c</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/JG5ANRwmrYdutUe.png" alt="image-20210601162647450"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/JG5ANRwmrYdutUe.png" alt="image-20210601162647450"></p>
 <ul>
 <li><p>获得集合中的所有元素 </p>
 <p>语法：smembers key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smembers set</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smembers set</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/M3Gqf8K9JjChmpV.png" alt="image-20210601162724674"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/M3Gqf8K9JjChmpV.png" alt="image-20210601162724674"></p>
 <ul>
 <li><p>判断元素是否在集合中 </p>
 <p>语法：sismember key member</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sismember set a</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sismember set a</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/3D7uqv6m5rW9Vt1.png" alt="image-20210601162828675"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/3D7uqv6m5rW9Vt1.png" alt="image-20210601162828675"></p>
 <h4 id="运算命令"><a href="#运算命令" class="headerlink" title="运算命令"></a>运算命令</h4><ul>
 <li>集合的差集运算 A-B 属于 A 并且 不属于 B 的元素构成的集合</li>
 </ul>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/gVf6sOQtckKP5zZ.png" alt="image-20210601163236299"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/gVf6sOQtckKP5zZ.png" alt="image-20210601163236299"></p>
 <p>​        语法：sdiff key [key…]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sadd setA 1 2 3</span><br><span class="line">sadd setB 2 3 4</span><br><span class="line">sdiff setA setB </span><br><span class="line">sdiff setB setA</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sadd setA 1 2 3</span><br><span class="line">sadd setB 2 3 4</span><br><span class="line">sdiff setA setB </span><br><span class="line">sdiff setB setA</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/fXCvmdEArncDFga.png" alt="image-20210601163120029"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/fXCvmdEArncDFga.png" alt="image-20210601163120029"></p>
 <ul>
 <li>集合的交集运算 属于A且属于B的元素构成的集合</li>
 </ul>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/ulWqsgZGM8BkrUj.png" alt="image-20210601163254020"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/ulWqsgZGM8BkrUj.png" alt="image-20210601163254020"></p>
 <p>​        语法：sinter key [key…]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sinter setA setB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sinter setA setB</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/SENqox9WYPjGyFi.png" alt="image-20210601163154159"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/SENqox9WYPjGyFi.png" alt="image-20210601163154159"></p>
 <ul>
 <li>集合的并集运算 属于 A 或者 属于 B 的元素构成的集合</li>
 </ul>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/2eJtxTQPga4UcCR.png" alt="image-20210601163309968"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/2eJtxTQPga4UcCR.png" alt="image-20210601163309968"></p>
 <p>​        语法：sunion key [key…]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sunion setA setB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sunion setA setB</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/WgDHkiElcqMdrjh.png" alt="image-20210601163341689"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/WgDHkiElcqMdrjh.png" alt="image-20210601163341689"></p>
 <ul>
 <li><p>获得集合中元素的个数 </p>
 <p>语法：scard key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scard setA</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scard setA</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/EPuOST73oZhW6qe.png" alt="image-20210601163456093"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/EPuOST73oZhW6qe.png" alt="image-20210601163456093"></p>
 <ul>
 <li><p>从集合中弹出一个元素 </p>
 <p>注意:由于集合是无序的，所以spop命令会从集合中随机选择一个元素弹出。</p>
 <p>语法：spop key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spop setA</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spop setA</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/GCXeSLgqEUDtwOy.png" alt="image-20210601163545832"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/GCXeSLgqEUDtwOy.png" alt="image-20210601163545832"></p>
 <h3 id="Sortedset-类型"><a href="#Sortedset-类型" class="headerlink" title="Sortedset 类型"></a>Sortedset 类型</h3><p>Sortedset 又叫 zset </p>
 <p>Sortedset 是有序集合，可排序的，但是唯一。</p>
 <p>Sortedset 和 set 的不同之处，会给 set 中元素添加一个分数，然后通过这个分数进行排序。</p>
@@ -575,26 +583,26 @@
 <p>语法：zadd key score member [score member…]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zadd scoreboard 80 zhangsan 89 lisi 94 wangwu</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zadd scoreboard 80 zhangsan 89 lisi 94 wangwu</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/Uy5xF9JT2GMthes.png" alt="image-20210601164535943"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/Uy5xF9JT2GMthes.png" alt="image-20210601164535943"></p>
 <ul>
 <li><p>获取元素分数</p>
 <p>语法：zscore key member</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zscore scoreboard lisi</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zscore scoreboard lisi</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/9dN2FlzmJTgsHUD.png" alt="image-20210601164559384"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/9dN2FlzmJTgsHUD.png" alt="image-20210601164559384"></p>
 <ul>
 <li><p>删除元素</p>
 <p>移除有序集key中的一个或多个成员，不存在的成员将被忽略。 当key存在但不是有序集类型时，返回一个错误。</p>
 <p>语法：zrem key member [member…]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrem scoreboard lisi</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrem scoreboard lisi</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/HERbVJ8uxDm1k3X.png" alt="image-20210601164630233"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/HERbVJ8uxDm1k3X.png" alt="image-20210601164630233"></p>
 <ul>
 <li><p>获得排名在某个范围的元素列表</p>
 <ul>
@@ -602,23 +610,25 @@
 <p>语法：zrange key start stop [withscores]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrange scoreboard 0 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrange scoreboard 0 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/U47zI5YrdPyN8uQ.png" alt="image-20210601164712369"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/U47zI5YrdPyN8uQ.png" alt="image-20210601164712369"></p>
 <ul>
 <li><p>按照元素分数从大到小的顺序返回索引从start到stop之间的所有元素（包含两端的元素） </p>
 <p>语法：zrevrange key start stop [withscores]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrevrange scoreboard 0 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrevrange scoreboard 0 2</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/Ohc1dTu2kgzPXqo.png" alt="image-20210601164822080"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/Ohc1dTu2kgzPXqo.png" alt="image-20210601164822080"></p>
+<blockquote>
+<p>如果需要获得元素的分数可以在命令末尾加上 withscores 参数 ··· </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrevrange scoreboard 0 2 withscores</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
-<blockquote>
-<p>如果需要获得元素的分数可以在命令末尾加上 withscores 参数 ···<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrevrange scoreboard 0 2 withscores</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/JbF7yL5UdtV4K9W.png" alt="image-20210601164952901"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/JbF7yL5UdtV4K9W.png" alt="image-20210601164952901"></p>
 <ul>
 <li><p>获取元素的排名</p>
 <ul>
@@ -626,96 +636,96 @@
 <p>语法：zrank key member</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zrank scoreboard zhangsan</span><br><span class="line">zrank scoreboard wangwu</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zrank scoreboard zhangsan</span><br><span class="line">zrank scoreboard wangwu</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/aFHQ6gRwdLMePSf.png" alt="image-20210601165042330"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/aFHQ6gRwdLMePSf.png" alt="image-20210601165042330"></p>
 <ul>
 <li><p>从大到小 </p>
 <p>语法：zrevrank key member</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zrevrank scoreboard zhangsan</span><br><span class="line">zrevrank scoreboard wangwu</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zrevrank scoreboard zhangsan</span><br><span class="line">zrevrank scoreboard wangwu</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/Pz8xE3rVBciFgKd.png" alt="image-20210601165132149"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/Pz8xE3rVBciFgKd.png" alt="image-20210601165132149"></p>
 <ul>
 <li><p>获得指定分数范围的元素</p>
 <p>语法：zrangebyscore key min max [withscores] [limit offset count]</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrangebyscore scoreboard 90 97 withscores</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrangebyscore scoreboard 90 97 withscores</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/oLBt1yzSEnjGMUh.png" alt="image-20210601165644019"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/oLBt1yzSEnjGMUh.png" alt="image-20210601165644019"></p>
 <ul>
 <li><p>增加某个元素的分数</p>
 <p>返回值是更改后的分数 </p>
 <p>语法：zincrby key increment member</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zincrby scoreboard 4 lisi</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zincrby scoreboard 4 lisi</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/s89cr3EYPOgXuyx.png" alt="image-20210601170100767"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/s89cr3EYPOgXuyx.png" alt="image-20210601170100767"></p>
 <ul>
 <li><p>获得集合中元素的数量</p>
 <p>语法：zcard key</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcard scoreboard</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcard scoreboard</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/qpnrPtFBE5X1Oz8.png" alt="image-20210601170124912"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/qpnrPtFBE5X1Oz8.png" alt="image-20210601170124912"></p>
 <ul>
 <li><p>获得指定分数范围内的元素个数</p>
 <p>语法：zcount key min max</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcount scoreboard 80 90</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcount scoreboard 80 90</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/pI5ZjfXDOCklFnV.png" alt="image-20210601170155032"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/pI5ZjfXDOCklFnV.png" alt="image-20210601170155032"></p>
 <ul>
 <li><p>按照排名范围删除元素</p>
 <p>语法：zremrangebyrank key start stop</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zremrangebyrank scoreboard 0 1</span><br><span class="line">zrange scoreboard 0 -1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zremrangebyrank scoreboard 0 1</span><br><span class="line">zrange scoreboard 0 -1</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/UI15vS6VNTKfJYm.png" alt="image-20210601170248813"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/UI15vS6VNTKfJYm.png" alt="image-20210601170248813"></p>
 <ul>
 <li><p>按照分数范围删除元素</p>
 <p>语法：zremrangebyscore key min max</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zadd scoreboard 84 zhangsan</span><br><span class="line">zremrangebyscore scoreboard 80 100</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zadd scoreboard 84 zhangsan</span><br><span class="line">zremrangebyscore scoreboard 80 100</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/5oE6kwN3rPLHvtK.png" alt="image-20210601170327131"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/5oE6kwN3rPLHvtK.png" alt="image-20210601170327131"></p>
 <h2 id="keys-命令"><a href="#keys-命令" class="headerlink" title="keys 命令"></a>keys 命令</h2><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
 <li><p>keys 返回满足给定pattern 的所有key </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keys list*</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keys list*</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/raluM4GepUxmOZh.png" alt="image-20210601172151520"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/raluM4GepUxmOZh.png" alt="image-20210601172151520"></p>
 </li>
 <li><p>exists 确认一个key 是否存在 </p>
 <p>示例：从结果来看，数据库中不存在HongWan 这个key，但是A这个key 是存在的 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exists HongWan</span><br><span class="line">exists age </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exists HongWan</span><br><span class="line">exists age </span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/hSY4BZekurAOHMI.png" alt="image-20210601173332782"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/hSY4BZekurAOHMI.png" alt="image-20210601173332782"></p>
 </li>
 <li><p>del 删除一个key </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del A</span><br><span class="line">exists A</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del A</span><br><span class="line">exists A</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/uvD6ZswStJflNFa.png" alt="image-20210601173545137"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/uvD6ZswStJflNFa.png" alt="image-20210601173545137"></p>
 </li>
 <li><p>rename 重命名key </p>
 <p>示例：b成功的被我们改名为B了 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">keys * </span><br><span class="line">rename b B</span><br><span class="line">keys * </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">keys * </span><br><span class="line">rename b B</span><br><span class="line">keys * </span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/2vynPOfLtG7gk4S.png" alt="image-20210601174148844"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/2vynPOfLtG7gk4S.png" alt="image-20210601174148844"></p>
 </li>
 <li><p>type 返回值的类型 </p>
 <p>示例：这个方法可以非常简单的判断出值的类型 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type B</span><br><span class="line">type dict</span><br><span class="line">type setA</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type B</span><br><span class="line">type dict</span><br><span class="line">type setA</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/mn3gsrhcfC7Zx89.png" alt="image-20210601174355434"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/mn3gsrhcfC7Zx89.png" alt="image-20210601174355434"></p>
 </li>
 </ul>
 <h3 id="设置-key-的生存时间"><a href="#设置-key-的生存时间" class="headerlink" title="设置 key 的生存时间"></a>设置 key 的生存时间</h3><p>Redis在实际使用过程中更多的用作缓存，然而缓存的数据一般都是需要设置生存时间的，即：到期后数据销毁。</p>
@@ -744,12 +754,12 @@
 </tr>
 </tbody></table>
 <p>例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">set test 1</span><br><span class="line">#设置test的值为1</span><br><span class="line"></span><br><span class="line">get test</span><br><span class="line">#获取test的值</span><br><span class="line"></span><br><span class="line">EXPIRE test 5    </span><br><span class="line">#设置test的生存时间为5秒</span><br><span class="line"></span><br><span class="line">TTL test</span><br><span class="line">#查看test的生于生成时间还有1秒删除</span><br><span class="line"></span><br><span class="line">TTL test</span><br><span class="line"></span><br><span class="line">get test</span><br><span class="line">#获取test的值，已经删除</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">set test 1</span><br><span class="line">#设置test的值为1</span><br><span class="line"></span><br><span class="line">get test</span><br><span class="line">#获取test的值</span><br><span class="line"></span><br><span class="line">EXPIRE test 5    </span><br><span class="line">#设置test的生存时间为5秒</span><br><span class="line"></span><br><span class="line">TTL test</span><br><span class="line">#查看test的生于生成时间还有1秒删除</span><br><span class="line"></span><br><span class="line">TTL test</span><br><span class="line"></span><br><span class="line">get test</span><br><span class="line">#获取test的值，已经删除</span><br></pre></td></tr></table></figure>
 
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/2IqNVg1tsdocDUZ.png" alt="image-20210601174754939"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/2IqNVg1tsdocDUZ.png" alt="image-20210601174754939"></p>
 <h2 id="Redis-持久化方案"><a href="#Redis-持久化方案" class="headerlink" title="Redis 持久化方案"></a>Redis 持久化方案</h2><h3 id="Rdb-方式"><a href="#Rdb-方式" class="headerlink" title="Rdb 方式"></a>Rdb 方式</h3><p>Redis 默认的方式，redis 通过快照方式将数据持久化到磁盘中。</p>
 <h4 id="设置持久化快照的条件"><a href="#设置持久化快照的条件" class="headerlink" title="设置持久化快照的条件"></a>设置持久化快照的条件</h4><p>在 Redis路径中的redis.conf(windows中是redis.windows.conf) 中修改持久化快照的条件：</p>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/NKWOLz21omipnk7.png" alt="image-20210601180050139"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/NKWOLz21omipnk7.png" alt="image-20210601180050139"></p>
 <blockquote>
 <p>将数据库保存在磁盘上：</p>
 <h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>#保存<seconds> <changes></p>
@@ -765,7 +775,7 @@
 <h1 id="-5"><a href="#-5" class="headerlink" title=""></a></h1><p>#save“”</p>
 </blockquote>
 <h4 id="持久化文件的存储目录"><a href="#持久化文件的存储目录" class="headerlink" title="持久化文件的存储目录"></a>持久化文件的存储目录</h4><p>在 redis.conf 中可以指定持久化文件的存储目录</p>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/mXBdHbNV6OeJyDS.png" alt="image-20210601180437617"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/mXBdHbNV6OeJyDS.png" alt="image-20210601180437617"></p>
 <blockquote>
 <p>#将数据库转储到的文件名</p>
 <p>dbfilename dump.rdb</p>
@@ -780,12 +790,10 @@
 <h3 id="Aof-方式"><a href="#Aof-方式" class="headerlink" title="Aof 方式"></a>Aof 方式</h3><p>Redis 默认是不使用该方式持久化的。Aof 方式的持久化，是操作一次 redis 数据库，则将操作的记录存储到 aof 持久化文件中。</p>
 <ul>
 <li><p>第一步：开启 aof 方式持久化方案。 将redis.conf中的appendonly改为yes，即开启aof方式的持久化方案。</p>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/jNALd3shx7Yz2Kc.png" alt="image-20210601180959284"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/jNALd3shx7Yz2Kc.png" alt="image-20210601180959284"></p>
 </li>
-</ul>
-<ul>
 <li><p>Aof文件存储的目录和rdb方式的一样。 Aof文件存储的名称</p>
-<p><img src= "/img/loading1.gif" data-lazy-src="https://i.loli.net/2021/06/01/jv6J3nm7fzqcCGM.png" alt="img"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2021/06/01/jv6J3nm7fzqcCGM.png" alt="img"></p>
 </li>
 </ul>
 <blockquote>
@@ -806,7 +814,7 @@
 </blockquote>
 <p>在同时使用aof和rdb方式时，如果redis重启，则数据从aof文件加载。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次的《初识Redis》就写到这里了，笔者在写这篇文章中也收获良多，本次部分学习来源：实验楼<a target="_blank" rel="noopener" href="https://www.lanqiao.cn/courses/106">《Redis 简明教程》</a>，<a target="_blank" rel="noopener" href="https://juejin.cn/">掘金</a>社区<a target="_blank" rel="noopener" href="https://juejin.cn/user/2277843821147885">轻云时解</a>的<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903639765483533#heading-52">《Redis 入门》</a>，<a target="_blank" rel="noopener" href="https://www.redis.net.cn/">Redis官网</a>教程<a target="_blank" rel="noopener" href="https://www.redis.net.cn/tutorial/3501.html">文档</a>。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Marx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zhoushing.github.io/2021-05-31-%E5%88%9D%E8%AF%86Redis.html">http://zhoushing.github.io/2021-05-31-初识Redis.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zhoushing.github.io" target="_blank">ZH'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="post-meta__tags" href="/tags/NoSQL/">NoSQL</a><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021-06-01-%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B8%AD%E9%97%B4%E7%BB%93%E7%82%B9.html"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">链表的中间结点</div></div></a></div><div class="next-post pull-right"><a href="/2021-05-31-4%E7%9A%84%E5%B9%82.html"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">4的幂</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021-01-24-初识MySQL.html" title="初识MySQL"><img class="cover" data-lazy-src="https://i.loli.net/2020/12/20/h5YJ2UvfwsrqFMC.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-24</div><div class="title">初识MySQL</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/img/head.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Marx</div><div class="author-info__description">一个很普通的男孩的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">146</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">62</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:zh.shing@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">正在每天努力加油，文章主要是个人心得和学习笔记，部分学习笔记来源：www.kuangstudy.com</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nosql"><span class="toc-number">1.1.</span> <span class="toc-text">Nosql</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nosql-%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">Nosql 分类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="toc-number">2.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">3.</span> <span class="toc-text">Redis 的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%8F%8A%E5%AE%89%E8%A3%85"><span class="toc-number">4.</span> <span class="toc-text">下载及安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80"><span class="toc-number">4.1.</span> <span class="toc-text">下载地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.2.</span> <span class="toc-text">安装步骤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">Redis常用的指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#String-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.1.</span> <span class="toc-text">String 类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.2.</span> <span class="toc-text">List 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4"><span class="toc-number">6.2.1.</span> <span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-%E6%95%A3%E5%88%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.3.</span> <span class="toc-text">Hash 散列类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-string-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">6.3.1.</span> <span class="toc-text">使用 string 的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">6.3.2.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-1"><span class="toc-number">6.3.3.</span> <span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.4.</span> <span class="toc-text">Set 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-2"><span class="toc-number">6.4.1.</span> <span class="toc-text">命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E5%91%BD%E4%BB%A4"><span class="toc-number">6.4.2.</span> <span class="toc-text">运算命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sortedset-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.5.</span> <span class="toc-text">Sortedset 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-3"><span class="toc-number">6.5.1.</span> <span class="toc-text">命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#keys-%E5%91%BD%E4%BB%A4"><span class="toc-number">7.</span> <span class="toc-text">keys 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">7.1.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-key-%E7%9A%84%E7%94%9F%E5%AD%98%E6%97%B6%E9%97%B4"><span class="toc-number">7.2.</span> <span class="toc-text">设置 key 的生存时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E6%A1%88"><span class="toc-number">8.</span> <span class="toc-text">Redis 持久化方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rdb-%E6%96%B9%E5%BC%8F"><span class="toc-number">8.1.</span> <span class="toc-text">Rdb 方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%8C%81%E4%B9%85%E5%8C%96%E5%BF%AB%E7%85%A7%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-number">8.1.1.</span> <span class="toc-text">设置持久化快照的条件</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-1"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-2"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-3"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-4"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-5"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%82%A8%E7%9B%AE%E5%BD%95"><span class="toc-number">0.0.1.</span> <span class="toc-text">持久化文件的存储目录</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-6"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rdb-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">0.0.1.</span> <span class="toc-text">Rdb 的问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aof-%E6%96%B9%E5%BC%8F"><span class="toc-number">0.1.</span> <span class="toc-text">Aof 方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-7"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-8"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021-07-24-%E6%9B%BF%E6%8D%A2%E9%9A%90%E8%97%8F%E6%95%B0%E5%AD%97%E5%BE%97%E5%88%B0%E7%9A%84%E6%9C%80%E6%99%9A%E6%97%B6%E9%97%B4.html" title="替换隐藏数字得到的最晚时间"><img data-lazy-src="https://i.loli.net/2020/12/20/h5YJ2UvfwsrqFMC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="替换隐藏数字得到的最晚时间"/></a><div class="content"><a class="title" href="/2021-07-24-%E6%9B%BF%E6%8D%A2%E9%9A%90%E8%97%8F%E6%95%B0%E5%AD%97%E5%BE%97%E5%88%B0%E7%9A%84%E6%9C%80%E6%99%9A%E6%97%B6%E9%97%B4.html" title="替换隐藏数字得到的最晚时间">替换隐藏数字得到的最晚时间</a><time datetime="2021-07-24T01:49:15.000Z" title="发表于 2021-07-24 09:49:15">2021-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-23-%E5%88%9D%E8%AF%86Vue.html" title="初识Vue"><img data-lazy-src="https://i.loli.net/2020/12/20/ctfGZFgkPA1Vbl5.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="初识Vue"/></a><div class="content"><a class="title" href="/2021-07-23-%E5%88%9D%E8%AF%86Vue.html" title="初识Vue">初识Vue</a><time datetime="2021-07-23T11:51:58.000Z" title="发表于 2021-07-23 19:51:58">2021-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-23-ssm%E5%9B%9E%E9%A1%BE.html" title="ssm回顾"><img data-lazy-src="https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ssm回顾"/></a><div class="content"><a class="title" href="/2021-07-23-ssm%E5%9B%9E%E9%A1%BE.html" title="ssm回顾">ssm回顾</a><time datetime="2021-07-23T09:06:00.000Z" title="发表于 2021-07-23 17:06:00">2021-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-23-%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%8C%BA%E5%9F%9F%E5%86%85%E6%89%80%E6%9C%89%E6%95%B4%E6%95%B0%E9%83%BD%E8%A2%AB%E8%A6%86%E7%9B%96.html" title="检查是否区域内所有整数都被覆盖"><img data-lazy-src="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="检查是否区域内所有整数都被覆盖"/></a><div class="content"><a class="title" href="/2021-07-23-%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%8C%BA%E5%9F%9F%E5%86%85%E6%89%80%E6%9C%89%E6%95%B4%E6%95%B0%E9%83%BD%E8%A2%AB%E8%A6%86%E7%9B%96.html" title="检查是否区域内所有整数都被覆盖">检查是否区域内所有整数都被覆盖</a><time datetime="2021-07-23T08:52:40.000Z" title="发表于 2021-07-23 16:52:40">2021-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-22-%E5%88%9D%E8%AF%86java%E6%97%A5%E5%BF%97.html" title="初识java日志"><img data-lazy-src="https://i.loli.net/2020/12/20/2yIJxvceY6AGoUC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="初识java日志"/></a><div class="content"><a class="title" href="/2021-07-22-%E5%88%9D%E8%AF%86java%E6%97%A5%E5%BF%97.html" title="初识java日志">初识java日志</a><time datetime="2021-07-22T08:55:59.000Z" title="发表于 2021-07-22 16:55:59">2021-07-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Marx</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://zhoushing.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Marx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zhoushing.github.io/2021-05-31-%E5%88%9D%E8%AF%86Redis.html">http://zhoushing.github.io/2021-05-31-初识Redis.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zhoushing.github.io" target="_blank">ZH'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="post-meta__tags" href="/tags/NoSQL/">NoSQL</a><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021-06-01-%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B8%AD%E9%97%B4%E7%BB%93%E7%82%B9.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">链表的中间结点</div></div></a></div><div class="next-post pull-right"><a href="/2021-05-31-4%E7%9A%84%E5%B9%82.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/trml2cPSoLfDZ7u.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">4的幂</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021-01-24-初识MySQL.html" title="初识MySQL"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-24</div><div class="title">初识MySQL</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="/img/head.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Marx</div><div class="author-info__description">一个很普通的男孩的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">146</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">62</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhoushing"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:zh.shing@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">正在每天努力加油，文章主要是个人心得和学习笔记，部分学习笔记来源：www.kuangstudy.com</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nosql"><span class="toc-number">1.1.</span> <span class="toc-text">Nosql</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nosql-%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">Nosql 分类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="toc-number">2.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">3.</span> <span class="toc-text">Redis 的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%8F%8A%E5%AE%89%E8%A3%85"><span class="toc-number">4.</span> <span class="toc-text">下载及安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80"><span class="toc-number">4.1.</span> <span class="toc-text">下载地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.2.</span> <span class="toc-text">安装步骤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">Redis常用的指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#String-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.1.</span> <span class="toc-text">String 类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.2.</span> <span class="toc-text">List 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4"><span class="toc-number">6.2.1.</span> <span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-%E6%95%A3%E5%88%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.3.</span> <span class="toc-text">Hash 散列类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-string-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">6.3.1.</span> <span class="toc-text">使用 string 的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">6.3.2.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-1"><span class="toc-number">6.3.3.</span> <span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.4.</span> <span class="toc-text">Set 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-2"><span class="toc-number">6.4.1.</span> <span class="toc-text">命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E5%91%BD%E4%BB%A4"><span class="toc-number">6.4.2.</span> <span class="toc-text">运算命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sortedset-%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.5.</span> <span class="toc-text">Sortedset 类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-3"><span class="toc-number">6.5.1.</span> <span class="toc-text">命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#keys-%E5%91%BD%E4%BB%A4"><span class="toc-number">7.</span> <span class="toc-text">keys 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">7.1.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-key-%E7%9A%84%E7%94%9F%E5%AD%98%E6%97%B6%E9%97%B4"><span class="toc-number">7.2.</span> <span class="toc-text">设置 key 的生存时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis-%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E6%A1%88"><span class="toc-number">8.</span> <span class="toc-text">Redis 持久化方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rdb-%E6%96%B9%E5%BC%8F"><span class="toc-number">8.1.</span> <span class="toc-text">Rdb 方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%8C%81%E4%B9%85%E5%8C%96%E5%BF%AB%E7%85%A7%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-number">8.1.1.</span> <span class="toc-text">设置持久化快照的条件</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-1"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-2"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-3"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-4"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-5"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%82%A8%E7%9B%AE%E5%BD%95"><span class="toc-number">0.0.1.</span> <span class="toc-text">持久化文件的存储目录</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-6"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rdb-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">0.0.1.</span> <span class="toc-text">Rdb 的问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aof-%E6%96%B9%E5%BC%8F"><span class="toc-number">0.1.</span> <span class="toc-text">Aof 方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-7"><span class="toc-number"></span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-8"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021-07-24-%E6%9B%BF%E6%8D%A2%E9%9A%90%E8%97%8F%E6%95%B0%E5%AD%97%E5%BE%97%E5%88%B0%E7%9A%84%E6%9C%80%E6%99%9A%E6%97%B6%E9%97%B4.html" title="替换隐藏数字得到的最晚时间"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="替换隐藏数字得到的最晚时间"/></a><div class="content"><a class="title" href="/2021-07-24-%E6%9B%BF%E6%8D%A2%E9%9A%90%E8%97%8F%E6%95%B0%E5%AD%97%E5%BE%97%E5%88%B0%E7%9A%84%E6%9C%80%E6%99%9A%E6%97%B6%E9%97%B4.html" title="替换隐藏数字得到的最晚时间">替换隐藏数字得到的最晚时间</a><time datetime="2021-07-24T01:49:15.000Z" title="发表于 2021-07-24 09:49:15">2021-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-23-%E5%88%9D%E8%AF%86Vue.html" title="初识Vue"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="初识Vue"/></a><div class="content"><a class="title" href="/2021-07-23-%E5%88%9D%E8%AF%86Vue.html" title="初识Vue">初识Vue</a><time datetime="2021-07-23T11:51:58.000Z" title="发表于 2021-07-23 19:51:58">2021-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-23-ssm%E5%9B%9E%E9%A1%BE.html" title="ssm回顾"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/2yIJxvceY6AGoUC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ssm回顾"/></a><div class="content"><a class="title" href="/2021-07-23-ssm%E5%9B%9E%E9%A1%BE.html" title="ssm回顾">ssm回顾</a><time datetime="2021-07-23T09:06:00.000Z" title="发表于 2021-07-23 17:06:00">2021-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-23-%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%8C%BA%E5%9F%9F%E5%86%85%E6%89%80%E6%9C%89%E6%95%B4%E6%95%B0%E9%83%BD%E8%A2%AB%E8%A6%86%E7%9B%96.html" title="检查是否区域内所有整数都被覆盖"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/dai2OuLHMgP7lms.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="检查是否区域内所有整数都被覆盖"/></a><div class="content"><a class="title" href="/2021-07-23-%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%8C%BA%E5%9F%9F%E5%86%85%E6%89%80%E6%9C%89%E6%95%B4%E6%95%B0%E9%83%BD%E8%A2%AB%E8%A6%86%E7%9B%96.html" title="检查是否区域内所有整数都被覆盖">检查是否区域内所有整数都被覆盖</a><time datetime="2021-07-23T08:52:40.000Z" title="发表于 2021-07-23 16:52:40">2021-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-07-22-%E5%88%9D%E8%AF%86java%E6%97%A5%E5%BF%97.html" title="初识java日志"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/17/gl1skzPY4WartSd.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="初识java日志"/></a><div class="content"><a class="title" href="/2021-07-22-%E5%88%9D%E8%AF%86java%E6%97%A5%E5%BF%97.html" title="初识java日志">初识java日志</a><time datetime="2021-07-22T08:55:59.000Z" title="发表于 2021-07-22 16:55:59">2021-07-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Marx</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://zhoushing.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")
