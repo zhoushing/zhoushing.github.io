@@ -504,9 +504,9 @@
     
     <category term="java" scheme="http://zhoushing.github.io/tags/java/"/>
     
-    <category term="排序" scheme="http://zhoushing.github.io/tags/%E6%8E%92%E5%BA%8F/"/>
-    
     <category term="哈希表" scheme="http://zhoushing.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
+    
+    <category term="排序" scheme="http://zhoushing.github.io/tags/%E6%8E%92%E5%BA%8F/"/>
     
   </entry>
   
