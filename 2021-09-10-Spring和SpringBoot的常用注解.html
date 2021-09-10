@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spring和SpringBoot的常用注解 | ZH'Blog</title><meta name="keywords" content="java,Spring,SpringBoot,注解开发"><meta name="author" content="Marx"><meta name="copyright" content="Marx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="引入传统的Spring做法是使用 xml 文件来对 bean 进行注入或者是配置切面、事物，这么做有两个主要的问题：1、如果所有的内容都配置在 xml 文件中，那么 xml 文件将会十分庞大；如果按需求分开 xml 文件，那么 xml 文件又会非常多。总之这将导致配置文件的可读性与可维护性变得很低。2、在开发中在 java 文件和 xml 文件之间不断切换，是一件麻烦的事，同时这种思维上的不连贯也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring和SpringBoot的常用注解">
+<meta property="og:url" content="http://zhoushing.github.io/2021-09-10-Spring%E5%92%8CSpringBoot%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3.html">
+<meta property="og:site_name" content="ZH&#39;Blog">
+<meta property="og:description" content="引入传统的Spring做法是使用 xml 文件来对 bean 进行注入或者是配置切面、事物，这么做有两个主要的问题：1、如果所有的内容都配置在 xml 文件中，那么 xml 文件将会十分庞大；如果按需求分开 xml 文件，那么 xml 文件又会非常多。总之这将导致配置文件的可读性与可维护性变得很低。2、在开发中在 java 文件和 xml 文件之间不断切换，是一件麻烦的事，同时这种思维上的不连贯也">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png">
+<meta property="article:published_time" content="2021-09-10T10:22:03.000Z">
+<meta property="article:modified_time" content="2021-09-10T13:58:31.337Z">
+<meta property="article:author" content="Marx">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="注解开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zhoushing.github.io/2021-09-10-Spring%E5%92%8CSpringBoot%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"NCGFY61Z1J","apiKey":"e4ef7b08b5cd88413ca63b2c0ac5ea59","indexName":"index","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring和SpringBoot的常用注解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-09-10 21:58:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="baidu-site-verification" content="code-APKE7ohZMo" /><meta name="msvalidate.01" content="522157A5A4BBF9EF58B23495EF8A7C5A" /><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="ZH'Blog" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="/img/head.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">182</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">71</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">ZH'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Spring和SpringBoot的常用注解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-10T10:22:03.000Z" title="发表于 2021-09-10 18:22:03">2021-09-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-09-10T13:58:31.337Z" title="更新于 2021-09-10 21:58:31">2021-09-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Spring%E7%B3%BB%E5%88%97/">Spring系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Spring和SpringBoot的常用注解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>传统的Spring做法是使用 xml 文件来对 bean 进行注入或者是配置切面、事物，这么做有两个主要的问题：<br>1、如果所有的内容都配置在 xml 文件中，那么 xml 文件将会十分庞大；如果按需求分开 xml 文件，那么 xml 文件又会非常多。总之这将导致配置文件的可读性与可维护性变得很低。<br>2、在开发中在 java 文件和 xml 文件之间不断切换，是一件麻烦的事，同时这种思维上的不连贯也会降低开发的效率。<br>为了解决这两个问题，Spring 引入了注解机制，通过”@XXX”的方式，让注解与 java bean 紧密结合，既大大减少了配置文件的体积，又增加了java bean的可读性与内聚性。</p>
+<h2 id="Spring-常用注解"><a href="#Spring-常用注解" class="headerlink" title="Spring 常用注解"></a>Spring 常用注解</h2><h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><p>@Autowired 顾名思义，就是自动装配，其作用是为了消除代码 Java 代码里面的 getter/setter 与 bean 属性中的 property 。当然，getter 看个人需求，如果私有属性需要对外提供的话，应当予以保留。</p>
+<p>@Autowired 默认按类型匹配的方式，在容器查找匹配的 bean，当<strong>有且仅有一个匹配的 bean</strong>时，Spring将其注入 @Autowired 标注的变量中。</p>
+<p>@Autowired 注解的 required 属性设置为 false 时，即使没有找到 bean 也不会报错。</p>
+<h3 id="Qualifier（指定注入Bean的名称）"><a href="#Qualifier（指定注入Bean的名称）" class="headerlink" title="@Qualifier（指定注入Bean的名称）"></a>@Qualifier（指定注入Bean的名称）</h3><p>如果容器中有一个以上匹配的Bean，则可以通过 @Qualifier 注解限定 bean的名称，<strong>通常和 @Autowired 组合使用</strong>。</p>
+<h3 id="Resource"><a href="#Resource" class="headerlink" title="@Resource"></a>@Resource</h3><p>@Resource注解与@Autowired注解作用非常相似，但是它默认是 byname 的，也就是按名称装配。</p>
+<ul>
+<li>@Resource后面没有任何内容，默认通过 name 属性去匹配 bean，找不到再按 type 去匹配</li>
+<li>指定了 name 或者 type 则根据指定的类型去匹配 bean</li>
+<li>指定了 name 和 type 则根据指定的 name 和 type 去匹配 bean，任何一个不匹配都将报错</li>
+</ul>
+<h3 id="Autowired-和-Resource-两个注解的区别"><a href="#Autowired-和-Resource-两个注解的区别" class="headerlink" title="@Autowired 和 @Resource 两个注解的区别"></a>@Autowired 和 @Resource 两个注解的区别</h3><ol>
+<li><p>@Autowired 默认按照 byType 方式进行 bean 匹配，@Resource 默认按照 byName 方式进行 bean 匹配</p>
+</li>
+<li><p>@Autowired 是 Spring 的注解，@Resource 是 J2EE 的注解，这个看一下导入注解的时候这两个注解的包名就一清二楚了</p>
+<p>Spring 属于第三方的，J2EE 是 Java 自己的东西。因此，建议使用 @Resource 注解，以减少代码和 Spring 之间的耦合。</p>
+</li>
+</ol>
+<h3 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h3><p>@Component 是所有受 Spring 管理组件的通用形式，@Component 注解可以放在类的头上，@Component 不推荐使用，更加推荐按照类的职责来将其标注为下面三个注解。</p>
+<h3 id="Repository"><a href="#Repository" class="headerlink" title="@Repository"></a>@Repository</h3><p>@Repository 对应数据访问层组件，也就是 DAO 层的 bean，作用等同于 @Component 。</p>
+<h3 id="Service"><a href="#Service" class="headerlink" title="@Service"></a>@Service</h3><p>@Service 用于标注业务层组件，也就是 Service 层的 bean，作用等同于 @Component 。</p>
+<h3 id="Controller"><a href="#Controller" class="headerlink" title="@Controller"></a>@Controller</h3><p>@Controller 对应控制层组件，也就是 Controller 层的 bean，作用等同于 @Component 。</p>
+<h3 id="Component、-Repository、-Service-和-Controller"><a href="#Component、-Repository、-Service-和-Controller" class="headerlink" title="@Component、@Repository、@Service 和 @Controller"></a>@Component、@Repository、@Service 和 @Controller</h3><p>它们的作用都是把普通 pojo 实例化到 spring 容器中，相当于配置文件中的<code>&lt;bean id=&quot;&quot; class=&quot;&quot;/&gt;</code>，它们如果没有指定 value 属性时，则默认的 bean 名字为这个类的类名首字母小写。如果指定了，就会以指定的 value 作为名字。</p>
+<h3 id="ResponseBody"><a href="#ResponseBody" class="headerlink" title="@ResponseBody"></a>@ResponseBody</h3><p>@ResponseBody 的作用其实是将 java 对象转为 json 格式的数据。</p>
+<p>@responseBody 注解的作用是将 controller 的方法返回的对象通过适当的转换器转换为指定的格式之后，写入到 response 对象的 body 区，通常用来返回 JSON 数据或者是 XML 数据。</p>
+<h3 id="RequestMapping"><a href="#RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h3><p>在 Controller 层中使用 @RequestMapping 来映射请求，也就是通过它来指定控制器可以处理哪些URL请求。</p>
+<p><strong>该注解有六个属性：</strong></p>
+<p>params：指定request中必须包含某些参数值是，才让该方法处理。</p>
+<p>headers：指定request中必须包含某些指定的header值，才能让该方法处理请求。</p>
+<p>value：指定请求的实际地址，指定的地址可以是URI Template 模式</p>
+<p>method：指定请求的method类型， GET、POST、PUT、DELETE等</p>
+<p>consumes：指定处理请求的提交内容类型（Content-Type），如application/json,text/html;</p>
+<p>produces：指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回</p>
+<h3 id="RequestParam"><a href="#RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h3><p>用于将请求参数区数据映射到功能处理方法的参数上，value 属性就是要接收从接口传递过来的参数的值的，如果接口传递过来的参数名和你接收的不一致，可以自己指定value。</p>
+<p>在下面例子中，前台传递过来的参数名和后台接收的参数名相同，所以无需指定 value 属性。</p>
+<p>后台：<img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/image-20210910213733421.png" alt="image-20210910213733421"></p>
+<p>前台：<img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/image-20210910213846864.png" alt="image-20210910213846864"></p>
+<h3 id="Scope"><a href="#Scope" class="headerlink" title="@Scope"></a>@Scope</h3><p>用来配置 spring bean 的作用域，它标识 bean 的作用域。</p>
+<p>默认值是单例</p>
+<p>1、singleton：单例模式,全局有且仅有一个实例</p>
+<p>2、prototype：原型模式,每次获取Bean的时候会有一个新的实例</p>
+<p>3、request：request 表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP request内有效</p>
+<p>4、session：session 作用域表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP session内有效</p>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="@Configuration"></a>@Configuration</h3><p>从Spring3.0，**@Configuration<strong>用于定义配置类，相当于XML中的<code>&lt;beans&gt;&lt; /beans&gt;</code>。一般加在主类上，被注解的类内部包含有一个或多个被 @Bean 注解的方法，这些方法将会被 **AnnotationConfigApplicationContext</strong> 或 <strong>AnnotationConfigWebApplicationContext</strong> 类进行扫描，并用于构建bean定义，初始化 Spring 容器。</p>
+<h3 id="ComponentScan"><a href="#ComponentScan" class="headerlink" title="@ComponentScan"></a>@ComponentScan</h3><p>组件扫描。相当于<code>&lt;context:component-scan /&gt;</code>，如果扫描到有@Component @Controller @Service等这些注解的类，则把</p>
+<p>这些类注册为bean。</p>
+<h3 id="Bean"><a href="#Bean" class="headerlink" title="@Bean"></a>@Bean</h3><p>相当于XML中的<code>&lt;bean&gt;&lt; /bean&gt;</code>,放在方法的上面，而不是类，意思是产生一个bean,并交给spring管理。</p>
+<h3 id="Transactional"><a href="#Transactional" class="headerlink" title="@Transactional"></a>@Transactional</h3><p>通过这个注解可以声明事务，可以添加在类上或者方法上。</p>
+<h3 id="PathVariable"><a href="#PathVariable" class="headerlink" title="@PathVariable"></a>@PathVariable</h3><p>路径变量注解，@RequestMapping中用{}来定义url部分的变量名</p>
+<h2 id="SpringBoot常用注解"><a href="#SpringBoot常用注解" class="headerlink" title="SpringBoot常用注解"></a>SpringBoot常用注解</h2><p>在 SpringBoot 中，摒弃了spring以往项目中大量繁琐的配置，遵循<em>约定大于配置</em>的原则，通过自身默认配置，极大的降低了项目搭建的复杂度。同样在 SpringBoot 中，大量注解的使用，使得代码看起来更加简洁，提高开发的效率。这些注解不光包括 SpringBoot 自有，也有一些是继承自 Spring 的，笔者对一些已经在 spring 中出现过的部分注解不予说明了。</p>
+<h3 id="SpringBootApplication"><a href="#SpringBootApplication" class="headerlink" title="@SpringBootApplication"></a>@SpringBootApplication</h3><p>查看源码可发现，@SpringBootApplication 是一个复合注解，包含了@SpringBootConfiguration，@EnableAutoConfiguration，@ComponentScan这三个注解。</p>
+<p>这三个注解的作用分别为：</p>
+<ul>
+<li>@SpringBootConfiguration：标注当前类是配置类，这个注解继承自@Configuration。并会将当前类内声明的一个或多个以@Bean注解标记的方法的实例纳入到 spring 容器中，并且实例名就是方法名。</li>
+<li>@EnableAutoConfiguration：是自动配置的注解，这个注解会根据我们添加的组件jar来完成一些默认配置，我们做微服务时会添加spring-boot-starter-web 这个组件 jar 的 pom 依赖，这样配置会默认配置 springmvc 和 tomcat。</li>
+<li>@ComponentScan：扫描当前包及其子包下被@Component，@Controller，@Service，@Repository注解标记的类并纳入到spring 容器中进行管理。等价于<code>&lt;context:component-scan /&gt;</code>的 xml 配置文件中的配置项。</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/image-20210910205201324.png" alt="image-20210910205201324"></p>
+<p>大多数情况下，这3个注解会被同时使用，基于最佳实践，这三个注解就被做了包装，成为了 @SpringBootApplication 注解。</p>
+<h3 id="ServletComponentScan"><a href="#ServletComponentScan" class="headerlink" title="@ServletComponentScan"></a>@ServletComponentScan</h3><p>在 SpringBootApplication 上使用 @ServletComponentScan 注解后，Servlet、Filter、Listener可以直接通过@WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。</p>
+<h3 id="MapperScan"><a href="#MapperScan" class="headerlink" title="@MapperScan"></a>@MapperScan</h3><p>SpringBoot 支持 mybatis 组件的一个注解，通过此注解指定 mybatis 接口类的路径，即可完成对 mybatis 接口的扫描。</p>
+<p>它和 @mapper 注解是一样的作用，不同的地方是扫描入口不一样。@mapper 需要加在每一个 mapper 接口类上面。所以大多数情况下，都是在规划好工程目录之后，通过 @MapperScan 注解配置路径完成 mapper 接口的注入。</p>
+<p>在 pom.xml 中添加 mybatis 相应组建依赖之后，就可以使用该注解。</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/image-20210910205837317.png" alt="image-20210910205837317"></p>
+<h3 id="资源导入注解"><a href="#资源导入注解" class="headerlink" title="资源导入注解"></a>资源导入注解</h3><p>@ImportResource @Import @PropertySource 这三个注解都是用来导入自定义的一些配置文件。</p>
+<ol>
+<li><p>@ImportResource(locations={}) 导入其他 xml 配置文件，需要标准在主配置类上。</p>
+</li>
+<li><p>@PropertySource 导入property的配置文件，value 属性指定文件路径，这个相当于使用spring的<code>&lt;import resource /&gt;</code>标签来完成配置项的引入。</p>
+</li>
+<li><p>@import 注解是可以将普通类导入到 spring 容器中做管理</p>
+</li>
+</ol>
+<h3 id="Component-1"><a href="#Component-1" class="headerlink" title="@Component"></a>@Component</h3><p>是通用注解，其他三个注解是这个注解的拓展，并且具有了特定的功能。</p>
+<p>通过这些注解的分层管理，就能将请求处理，义务逻辑处理，数据库操作处理分离出来，为代码解耦，也方便了以后项目的维护和开发。</p>
+<p>所以我们在正常开发中，如果能用@Service, @Controller, @Repository 其中一个标注这个类的定位的时候，就不要用 @Component 来标注。</p>
+<h3 id="Repository-1"><a href="#Repository-1" class="headerlink" title="@Repository"></a>@Repository</h3><p>@Repository 注解类作为 DAO 对象，管理操作数据库的对象。</p>
+<p>总得来看，@Component, @Service, @Controller, @Repository 是 spring 注解，注解后可以被 spring 框架所扫描并注入到 spring 容器来进行管理。</p>
+<h3 id="Service-1"><a href="#Service-1" class="headerlink" title="@Service"></a>@Service</h3><p>这个注解用来标记业务层的组件，我们会将业务逻辑处理的类都会加上这个注解交给 spring 容器。事务的切面也会配置在这一层。当然这个注解不是一定要用。有个泛指组件的注解 @Component ，当我们不能确定具体作用的时候就可以用泛指组件的注解托付给 spring 容器。 </p>
+<h3 id="Controller-1"><a href="#Controller-1" class="headerlink" title="@Controller"></a>@Controller</h3><p>表明这个类是一个控制器类，和 @RequestMapping 来配合使用拦截请求，如果不在 method 中注明请求的方式，默认是拦截 get 和 post 请求。这样请求会完成后转向一个视图解析器。但是在大多微服务搭建的时候，前后端会做分离。所以请求后端只关注数据处理，后端返回 json 数据的话，需要配合 @ResponseBody 注解来完成。</p>
+<p>这样一个只需要返回数据的接口就需要3个注解来完成，大多情况我们都是需要返回数据。也是基于最佳实践，所以将这三个注解进一步整合变成下面的 @RestController 注解。</p>
+<h3 id="RestController"><a href="#RestController" class="headerlink" title="@RestController"></a>@RestController</h3><p>它是 @Controller 和 @ResponseBody 的结合，一个类被加上 @RestController 注解，数据接口中就不再需要添加 @ResponseBody。更加简洁。</p>
+<h3 id="RequestMapping-1"><a href="#RequestMapping-1" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h3><p>同 @RestController 的问题一样，每次使用@RequestMapping(value=””,method= RequestMethod.GET )时，我们都需要明确请求方式。这样的写法又会显得比较繁琐，于是乎就有了如下的几个注解。</p>
+<table>
+<thead>
+<tr>
+<th>普通风格</th>
+<th><strong>Rest风格</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@RequestMapping(value=“”,method = RequestMethod.GET)</td>
+<td>@GetMapping(value =“”)</td>
+</tr>
+<tr>
+<td>@RequestMapping(value=“”,method = RequestMethod.POST)</td>
+<td>@PostMapping(value =“”)</td>
+</tr>
+<tr>
+<td>@RequestMapping(value=“”,method = RequestMethod.PUT)</td>
+<td>@PutMapping(value =“”)</td>
+</tr>
+<tr>
+<td>@RequestMapping(value=“”,method = RequestMethod.DELETE)</td>
+<td>@DeleteMapping(value =“”)</td>
+</tr>
+</tbody></table>
+<p>这几个注解是 @RequestMapping(value=””,method= RequestMethod.xxx )的最佳实践。为了代码的更加简洁。</p>
+<h3 id="CrossOrigin"><a href="#CrossOrigin" class="headerlink" title="@CrossOrigin"></a>@CrossOrigin</h3><p>@CrossOrigin(origins = “”, maxAge = 1000) 这个注解主要是为了解决跨域访问的问题。这个注解可以为整个 controller 配置启用跨域，也可以在方法级别启用。</p>
+<p>我们在项目中使用这个注解是为了解决微服务在做定时任务调度编排的时候，会访问不同的 spider 节点而出现跨域问题。</p>
+<h3 id="Transactional-1"><a href="#Transactional-1" class="headerlink" title="@Transactional"></a>@Transactional</h3><p>在spring boot中不用再单独配置事务管理，一般情况是我们会在 servcie 层添加了事务注解，即可开启事务。要注意的是，事务的开启只能在 public 方法上，并且主要事务切面的回滚条件。正常我们配置 rollbackfor exception 时 ，如果在方法里捕获了异常就会导致事务切面配置的失效。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>本文参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoxi/p/5935009.html">Spring系列之Spring常用注解总结</a> 和 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903795047006221?share_token=b5e86c3f-80bf-46fa-8ee3-8365c20f45ba">程序员笔记——springboot 之常用注解</a>。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Marx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zhoushing.github.io/2021-09-10-Spring%E5%92%8CSpringBoot%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3.html">http://zhoushing.github.io/2021-09-10-Spring和SpringBoot的常用注解.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zhoushing.github.io" target="_blank">ZH'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java/">java</a><a class="post-meta__tags" href="/tags/Spring/">Spring</a><a class="post-meta__tags" href="/tags/SpringBoot/">SpringBoot</a><a class="post-meta__tags" href="/tags/%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91/">注解开发</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021-09-10-%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8F.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">跳跃游戏</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021-05-30-2的幂.html" title="2的幂"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/17/XgEY67vPU2Imu5o.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-30</div><div class="title">2的幂</div></div></a></div><div><a href="/2021-05-31-4的幂.html" title="4的幂"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-31</div><div class="title">4的幂</div></div></a></div><div><a href="/2021-06-29-Excel表列名称.html" title="Excel表列名称"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-29</div><div class="title">Excel表列名称</div></div></a></div><div><a href="/2021-06-02-01背包问题.html" title="01背包问题"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/2yIJxvceY6AGoUC.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-02</div><div class="title">01背包问题</div></div></a></div><div><a href="/2021-03-06-Pow(x, n).html" title="Pow(x, n)"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-06</div><div class="title">Pow(x, n)</div></div></a></div><div><a href="/2021-04-14-Trie-前缀树.html" title="Trie[前缀树]"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/h5YJ2UvfwsrqFMC.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-14</div><div class="title">Trie[前缀树]</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="/img/head.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Marx</div><div class="author-info__description">一个很普通的男孩的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">182</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">71</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhoushing"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:zh.shing@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">正在每天努力加油，文章主要是个人心得和学习笔记，部分学习笔记来源：www.kuangstudy.com</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">Spring 常用注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autowired"><span class="toc-number">2.1.</span> <span class="toc-text">@Autowired</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Qualifier%EF%BC%88%E6%8C%87%E5%AE%9A%E6%B3%A8%E5%85%A5Bean%E7%9A%84%E5%90%8D%E7%A7%B0%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">@Qualifier（指定注入Bean的名称）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Resource"><span class="toc-number">2.3.</span> <span class="toc-text">@Resource</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autowired-%E5%92%8C-Resource-%E4%B8%A4%E4%B8%AA%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.4.</span> <span class="toc-text">@Autowired 和 @Resource 两个注解的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Component"><span class="toc-number">2.5.</span> <span class="toc-text">@Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repository"><span class="toc-number">2.6.</span> <span class="toc-text">@Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service"><span class="toc-number">2.7.</span> <span class="toc-text">@Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Controller"><span class="toc-number">2.8.</span> <span class="toc-text">@Controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Component%E3%80%81-Repository%E3%80%81-Service-%E5%92%8C-Controller"><span class="toc-number">2.9.</span> <span class="toc-text">@Component、@Repository、@Service 和 @Controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ResponseBody"><span class="toc-number">2.10.</span> <span class="toc-text">@ResponseBody</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RequestMapping"><span class="toc-number">2.11.</span> <span class="toc-text">@RequestMapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RequestParam"><span class="toc-number">2.12.</span> <span class="toc-text">@RequestParam</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scope"><span class="toc-number">2.13.</span> <span class="toc-text">@Scope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration"><span class="toc-number">2.14.</span> <span class="toc-text">@Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ComponentScan"><span class="toc-number">2.15.</span> <span class="toc-text">@ComponentScan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bean"><span class="toc-number">2.16.</span> <span class="toc-text">@Bean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transactional"><span class="toc-number">2.17.</span> <span class="toc-text">@Transactional</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PathVariable"><span class="toc-number">2.18.</span> <span class="toc-text">@PathVariable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">SpringBoot常用注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringBootApplication"><span class="toc-number">3.1.</span> <span class="toc-text">@SpringBootApplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ServletComponentScan"><span class="toc-number">3.2.</span> <span class="toc-text">@ServletComponentScan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MapperScan"><span class="toc-number">3.3.</span> <span class="toc-text">@MapperScan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%AF%BC%E5%85%A5%E6%B3%A8%E8%A7%A3"><span class="toc-number">3.4.</span> <span class="toc-text">资源导入注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Component-1"><span class="toc-number">3.5.</span> <span class="toc-text">@Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repository-1"><span class="toc-number">3.6.</span> <span class="toc-text">@Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service-1"><span class="toc-number">3.7.</span> <span class="toc-text">@Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Controller-1"><span class="toc-number">3.8.</span> <span class="toc-text">@Controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RestController"><span class="toc-number">3.9.</span> <span class="toc-text">@RestController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RequestMapping-1"><span class="toc-number">3.10.</span> <span class="toc-text">@RequestMapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CrossOrigin"><span class="toc-number">3.11.</span> <span class="toc-text">@CrossOrigin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transactional-1"><span class="toc-number">3.12.</span> <span class="toc-text">@Transactional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021-09-10-Spring%E5%92%8CSpringBoot%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3.html" title="Spring和SpringBoot的常用注解"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring和SpringBoot的常用注解"/></a><div class="content"><a class="title" href="/2021-09-10-Spring%E5%92%8CSpringBoot%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3.html" title="Spring和SpringBoot的常用注解">Spring和SpringBoot的常用注解</a><time datetime="2021-09-10T10:22:03.000Z" title="发表于 2021-09-10 18:22:03">2021-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-09-10-%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8F.html" title="跳跃游戏"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UIZpx1V2yLbwWKC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="跳跃游戏"/></a><div class="content"><a class="title" href="/2021-09-10-%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8F.html" title="跳跃游戏">跳跃游戏</a><time datetime="2021-09-10T02:51:21.000Z" title="发表于 2021-09-10 10:51:21">2021-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-09-10-%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D%E5%88%86%E7%BB%84.html" title="字母异位词分组"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/UN2tJXzFgilfvny.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="字母异位词分组"/></a><div class="content"><a class="title" href="/2021-09-10-%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D%E5%88%86%E7%BB%84.html" title="字母异位词分组">字母异位词分组</a><time datetime="2021-09-10T02:35:01.000Z" title="发表于 2021-09-10 10:35:01">2021-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-09-10-%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91.html" title="对称二叉树"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/h5YJ2UvfwsrqFMC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="对称二叉树"/></a><div class="content"><a class="title" href="/2021-09-10-%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91.html" title="对称二叉树">对称二叉树</a><time datetime="2021-09-10T01:49:39.000Z" title="发表于 2021-09-10 09:49:39">2021-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021-09-09-%E6%8E%A5%E9%9B%A8%E6%B0%B4.html" title="接雨水"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/2yIJxvceY6AGoUC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="接雨水"/></a><div class="content"><a class="title" href="/2021-09-09-%E6%8E%A5%E9%9B%A8%E6%B0%B4.html" title="接雨水">接雨水</a><time datetime="2021-09-09T08:47:50.000Z" title="发表于 2021-09-09 16:47:50">2021-09-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Marx</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://zhoushing.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

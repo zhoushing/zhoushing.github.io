@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhoushing.github.io/2021-09-10-Spring%E5%92%8CSpringBoot%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3.html</loc>
+    
+    <lastmod>2021-09-10</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://zhoushing.github.io/2021-09-10-%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8F.html</loc>
     
     <lastmod>2021-09-10</lastmod>
@@ -1809,6 +1816,27 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>http://zhoushing.github.io/tags/Spring/</loc>
+    <lastmod>2021-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://zhoushing.github.io/tags/SpringBoot/</loc>
+    <lastmod>2021-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://zhoushing.github.io/tags/%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91/</loc>
+    <lastmod>2021-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -1834,6 +1862,13 @@
   
   <url>
     <loc>http://zhoushing.github.io/categories/Java%E7%B3%BB%E5%88%97/</loc>
+    <lastmod>2021-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://zhoushing.github.io/categories/Spring%E7%B3%BB%E5%88%97/</loc>
     <lastmod>2021-09-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
