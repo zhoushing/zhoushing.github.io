@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux上的MySQL操作 | 徐年の博客</title><meta name="keywords" content="MySQL,Linux"><meta name="author" content="Marx"><meta name="copyright" content="Marx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="引言Linux上的操作可以说是后台程序员的基本功之一，这次我们来讨论在Linux上的MySQL常用操作。 安装安装之前可以启动服务看本机是否已经安装过MySQL 1service mysqld start  删除操作不在本文的讨论内容中，如果服务启动成功或者提示服务已经启动，可以停止服务然后跳到下一步配置操作 1service mysqld stop  安装（yum命令自动从网上寻找mysql服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux上的MySQL操作">
+<meta property="og:url" content="https://blog.xuyicheng.top/2022-05-09-Linux%E4%B8%8A%E7%9A%84MySQL%E6%93%8D%E4%BD%9C.html">
+<meta property="og:site_name" content="徐年の博客">
+<meta property="og:description" content="引言Linux上的操作可以说是后台程序员的基本功之一，这次我们来讨论在Linux上的MySQL常用操作。 安装安装之前可以启动服务看本机是否已经安装过MySQL 1service mysqld start  删除操作不在本文的讨论内容中，如果服务启动成功或者提示服务已经启动，可以停止服务然后跳到下一步配置操作 1service mysqld stop  安装（yum命令自动从网上寻找mysql服务">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/12/17/LulEzNs5kwMCoOf.png">
+<meta property="article:published_time" content="2022-05-09T05:51:43.000Z">
+<meta property="article:modified_time" content="2022-05-09T11:46:40.117Z">
+<meta property="article:author" content="Marx">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/12/17/LulEzNs5kwMCoOf.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.xuyicheng.top/2022-05-09-Linux%E4%B8%8A%E7%9A%84MySQL%E6%93%8D%E4%BD%9C"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"NCGFY61Z1J","apiKey":"e4ef7b08b5cd88413ca63b2c0ac5ea59","indexName":"index","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux上的MySQL操作',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-09 19:46:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="baidu-site-verification" content="code-APKE7ohZMo" /><meta name="msvalidate.01" content="522157A5A4BBF9EF58B23495EF8A7C5A" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="徐年の博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/blog_images/me.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">255</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">83</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/12/17/LulEzNs5kwMCoOf.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">徐年の博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Linux上的MySQL操作</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-09T05:51:43.000Z" title="发表于 2022-05-09 13:51:43">2022-05-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-05-09T11:46:40.117Z" title="更新于 2022-05-09 19:46:40">2022-05-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97/">Linux操作系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux上的MySQL操作"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Linux上的操作可以说是后台程序员的基本功之一，这次我们来讨论在Linux上的MySQL常用操作。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装之前可以启动服务看本机是否已经安装过MySQL</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
+
+<p>删除操作不在本文的讨论内容中，如果服务启动成功或者提示服务已经启动，可以停止服务然后跳到下一步配置操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld stop</span><br></pre></td></tr></table></figure>
+
+<p>安装（yum命令自动从网上寻找mysql服务资源，下载至本地并完成安装，安装过程中无脑yes就行）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install mysql-server</span><br></pre></td></tr></table></figure>
+
+<p>同时也可以采用自己下载安装包安装的方式，但是比较繁琐，本文不再讨论</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p><code>my.cnf</code>是linux系统中MySQL的配置文档，使用<code>mysql --help | grep &#39;my.cnf&#39;</code>命令即可查看MySQL启动时读取配置文件的默认目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql --<span class="built_in">help</span> | grep <span class="string">&#x27;my.cnf&#x27;</span></span><br><span class="line">                      order of preference, my.cnf, <span class="variable">$MYSQL_TCP_PORT</span>,</span><br><span class="line">/etc/mysql/my.cnf  /etc/my.cnf  ~/.my.cnf</span><br></pre></td></tr></table></figure>
+
+<p>从上面可以清楚地看到，/etc/mysql/my.cnf、/etc/my.cnf以及~/.my.cnf这些文件就是MySQL启动时默认会依次读取的配置文件，并且顺序排前的优先</p>
+<p>在本机查询出来就是当前系统中默认配置文件的位置，读者需注意自己本机显示的顺序，然后找到对应的位置修改文件</p>
+<p>在笔者的机器中是/etc/my.cnf，所以可以直接使用vi进行编辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/my.cnf</span><br></pre></td></tr></table></figure>
+
+<p>在[mysqld]下加入<code>skip-grant-tables</code>可以跳过登录验证，不需要输入密码，之后设置好密码之后需要将此行删除或者注释。启动MySQL服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
+
+<p>运行命令进入MySQL</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+
+<p>由于此时没有设置密码，要求你输入密码时直接回车跳过即可，设置密码之后每次都需要输入密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; </span><br><span class="line">use mysql;</span><br><span class="line">update mysql.user <span class="built_in">set</span> authentication_string=password(<span class="string">&#x27;root_password&#x27;</span>) <span class="built_in">where</span> user=<span class="string">&#x27;root&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<p>上述命令中<code>root_password</code>就是设置的密码，读者可以根据自己的需要设置相应的密码，在MySQL命令行状态下，<code>exit</code>命令可以退出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<p>在此之后，只需要重启MySQL服务就可以使用自己设定的密码登录了（要注意去掉配置文件中的<code>skip-grant-tables</code>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="开启binlog"><a href="#开启binlog" class="headerlink" title="开启binlog"></a>开启binlog</h2><p>在配置文件中进行如下修改（注意要关闭服务后修改再重启服务）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line"><span class="comment"># binlog config</span></span><br><span class="line"><span class="comment"># 为当前服务取一个唯一的 id（MySQL5.7 之后需要配置）</span></span><br><span class="line">server-id = 1</span><br><span class="line"><span class="comment"># 这个参数表示启用 binlog 功能，并指定 binlog 的存储目录</span></span><br><span class="line">log-bin = /var/lib/mysql/mysql-bin</span><br><span class="line"><span class="comment"># binlog采用的模式（STATEMENT/ROW/MIXED）</span></span><br><span class="line">binlog-format = MIXED</span><br></pre></td></tr></table></figure>
+
+<p>重启服务后查看binlog开启是否成功，如下就是开启成功后的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE &#x27;%log_bin%&#x27;;</span><br><span class="line">+---------------------------------+----------------------------------+</span><br><span class="line">| Variable_name                   | Value                            |</span><br><span class="line">+---------------------------------+----------------------------------+</span><br><span class="line">| log_bin                         | ON                               |</span><br><span class="line">| log_bin_basename                | /www/server/data/mysql-bin       |</span><br><span class="line">| log_bin_index                   | /www/server/data/mysql-bin.index |</span><br><span class="line">| log_bin_trust_function_creators | OFF                              |</span><br><span class="line">| log_bin_use_v1_row_events       | OFF                              |</span><br><span class="line">| sql_log_bin                     | ON                               |</span><br><span class="line">+---------------------------------+----------------------------------+</span><br><span class="line">6 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><ol>
+<li>首先创建空数据库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;create database abc;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>导入数据库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 指向创建的数据库</span><br><span class="line">mysql&gt;use abc;</span><br><span class="line"></span><br><span class="line"># 设置编码</span><br><span class="line">mysql&gt;set names utf8;</span><br><span class="line"></span><br><span class="line"># 导入数据（注意sql文件的路径）</span><br><span class="line">mysql&gt;source /home/abc/abc.sql;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><p>导出数据和表结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u用户名 -p密码 数据库名 &gt; 数据库名.sql</span><br><span class="line"># 例如： 路径：/usr/local/mysql/bin/   命令：mysqldump -uroot -p abc &gt; abc.sql</span><br><span class="line"># 以上操作之后sql文件就存在/usr/local/mysql/bin/abc.sql中了</span><br></pre></td></tr></table></figure>
+
+<p>只导出表结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u用户名 -p密码 -d 数据库名 &gt; 数据库名.sql</span><br><span class="line"># 同上：/usr/local/mysql/bin/   mysqldump -uroot -p -d abc &gt; abc.sql</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>本文参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/Aykl119/article/details/122223582">Linux安装MySQL(超详细)</a>  及 <a target="_blank" rel="noopener" href="https://blog.csdn.net/CCqwas/article/details/123535787">MySQL 的 binlog 的三种格式</a>、<a target="_blank" rel="noopener" href="https://www.cnblogs.com/linyu51/p/14925666.html">Linux系统MySQL如何导入数据库</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Marx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.xuyicheng.top/2022-05-09-Linux%E4%B8%8A%E7%9A%84MySQL%E6%93%8D%E4%BD%9C.html">https://blog.xuyicheng.top/2022-05-09-Linux上的MySQL操作.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.xuyicheng.top" target="_blank">徐年の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/12/17/LulEzNs5kwMCoOf.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022-03-23-%E6%95%8F%E6%84%9F%E8%AF%8D%E6%9B%BF%E6%8D%A2.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">敏感词替换</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021-01-24-初识MySQL.html" title="初识MySQL"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-24</div><div class="title">初识MySQL</div></div></a></div><div><a href="/2021-10-13-MySQL入门.html" title="MySQL入门"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/dai2OuLHMgP7lms.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-13</div><div class="title">MySQL入门</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/blog_images/me.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Marx</div><div class="author-info__description">一个普通男孩的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">255</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">83</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhoushing"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:zh.shing@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">正在每天努力加油，文章主要是个人心得、学习笔记以及很多算法题解，发现错误欢迎邮件指正，不胜感激</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%90%AFbinlog"><span class="toc-number">4.</span> <span class="toc-text">开启binlog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5"><span class="toc-number">5.</span> <span class="toc-text">导入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA"><span class="toc-number">6.</span> <span class="toc-text">导出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022-05-09-Linux%E4%B8%8A%E7%9A%84MySQL%E6%93%8D%E4%BD%9C.html" title="Linux上的MySQL操作"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/17/LulEzNs5kwMCoOf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux上的MySQL操作"/></a><div class="content"><a class="title" href="/2022-05-09-Linux%E4%B8%8A%E7%9A%84MySQL%E6%93%8D%E4%BD%9C.html" title="Linux上的MySQL操作">Linux上的MySQL操作</a><time datetime="2022-05-09T05:51:43.000Z" title="发表于 2022-05-09 13:51:43">2022-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022-03-23-%E6%95%8F%E6%84%9F%E8%AF%8D%E6%9B%BF%E6%8D%A2.html" title="敏感词替换"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="敏感词替换"/></a><div class="content"><a class="title" href="/2022-03-23-%E6%95%8F%E6%84%9F%E8%AF%8D%E6%9B%BF%E6%8D%A2.html" title="敏感词替换">敏感词替换</a><time datetime="2022-03-23T14:27:31.000Z" title="发表于 2022-03-23 22:27:31">2022-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022-03-21-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.html" title="模板方法模式"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="模板方法模式"/></a><div class="content"><a class="title" href="/2022-03-21-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.html" title="模板方法模式">模板方法模式</a><time datetime="2022-03-21T12:33:38.000Z" title="发表于 2022-03-21 20:33:38">2022-03-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022-03-21-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F.html" title="策略模式"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/2yIJxvceY6AGoUC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="策略模式"/></a><div class="content"><a class="title" href="/2022-03-21-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F.html" title="策略模式">策略模式</a><time datetime="2022-03-21T06:26:39.000Z" title="发表于 2022-03-21 14:26:39">2022-03-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022-03-15-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F.html" title="代理模式"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/ctfGZFgkPA1Vbl5.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代理模式"/></a><div class="content"><a class="title" href="/2022-03-15-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F.html" title="代理模式">代理模式</a><time datetime="2022-03-15T09:41:55.000Z" title="发表于 2022-03-15 17:41:55">2022-03-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Marx</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://blog.xuyicheng.top/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,爱国,敬业,诚信,友善,自由,平等,公正,法治" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><!-- hexo injector body_end end --></body></html>
