@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>访问控制模型浅析 | 徐年の博客</title><meta name="keywords" content="访问控制模型"><meta name="author" content="Marx"><meta name="copyright" content="Marx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言在一个系统之中，对于权限的把控以及用户的认证可以说是非常的重要。笔者在以前开发的系统中也接触到了各种的对用户访问的控制模型，偶然刷到大佬的文章，特记下此文来进行探讨。 认证与授权认证在一个系统中，尤其是企业系统中，对用户的认证很重要。在企业系统中，用户通常分为外部用户和内部用户。这两者的认证通常也不相同，  外部用户可能更多使用的手机号、微信等方式来进行登录。登录进入之后，直接使用企业提供的应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="访问控制模型浅析">
+<meta property="og:url" content="https://blog.xuyicheng.top/2023-01-08-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B%E6%B5%85%E6%9E%90.html">
+<meta property="og:site_name" content="徐年の博客">
+<meta property="og:description" content="前言在一个系统之中，对于权限的把控以及用户的认证可以说是非常的重要。笔者在以前开发的系统中也接触到了各种的对用户访问的控制模型，偶然刷到大佬的文章，特记下此文来进行探讨。 认证与授权认证在一个系统中，尤其是企业系统中，对用户的认证很重要。在企业系统中，用户通常分为外部用户和内部用户。这两者的认证通常也不相同，  外部用户可能更多使用的手机号、微信等方式来进行登录。登录进入之后，直接使用企业提供的应">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png">
+<meta property="article:published_time" content="2023-01-08T08:11:14.000Z">
+<meta property="article:modified_time" content="2023-01-08T08:13:31.937Z">
+<meta property="article:author" content="Marx">
+<meta property="article:tag" content="访问控制模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.xuyicheng.top/2023-01-08-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B%E6%B5%85%E6%9E%90"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"NCGFY61Z1J","apiKey":"e4ef7b08b5cd88413ca63b2c0ac5ea59","indexName":"index","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '访问控制模型浅析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-08 16:13:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="baidu-site-verification" content="code-APKE7ohZMo" /><meta name="msvalidate.01" content="522157A5A4BBF9EF58B23495EF8A7C5A" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="徐年の博客" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/blog_images/me.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">259</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">85</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">徐年の博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">访问控制模型浅析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-08T08:11:14.000Z" title="发表于 2023-01-08 16:11:14">2023-01-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-01-08T08:13:31.937Z" title="更新于 2023-01-08 16:13:31">2023-01-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="访问控制模型浅析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在一个系统之中，对于权限的把控以及用户的认证可以说是非常的重要。笔者在以前开发的系统中也接触到了各种的对用户访问的控制模型，偶然刷到大佬的文章，特记下此文来进行探讨。</p>
+<h2 id="认证与授权"><a href="#认证与授权" class="headerlink" title="认证与授权"></a>认证与授权</h2><h3 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h3><p>在一个系统中，尤其是企业系统中，对用户的认证很重要。在企业系统中，用户通常分为外部用户和内部用户。这两者的认证通常也不相同，</p>
+<ul>
+<li>外部用户可能更多使用的手机号、微信等方式来进行登录。登录进入之后，直接使用企业提供的应用即可，提供的也通常是统一权限。</li>
+<li>内部用户使用诸如企业微信、企业邮箱、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%9F%9F%E8%B4%A6%E5%8F%B7?fromModule=lemma_search-box">域账号</a>等方式来进行登录。因为企业内部通常有许多的内部系统，比如OA、hr等系统。所以每个员工可能拥有着不同系统的使用权，同时各个系统内部可能还拥有自己的权限，比如经典的管理员以及普通用户。</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/blog_images/image-20230108161331407.png" alt="image-20230108161331407"></p>
+<h3 id="授权-访问控制"><a href="#授权-访问控制" class="headerlink" title="授权/访问控制"></a>授权/访问控制</h3><p>授权，也叫做访问控制，就是授予用户访问某个实体（资源，数据）的权限。因此一个好的访问控制模型就至关重要了。</p>
+<h3 id="访问控制模型"><a href="#访问控制模型" class="headerlink" title="访问控制模型"></a>访问控制模型</h3><h4 id="访问控制列表"><a href="#访问控制列表" class="headerlink" title="访问控制列表"></a>访问控制列表</h4><p>ACL (Access Control Lists)，访问控制列表。需要管理员为每个资源（客体）显式分配权限。</p>
+<p>这是一种比较古老的权限控制机制，它是面向资源的访问控制模型。管理员为每个资源（客体）分配<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%9D%83%E9%99%90%E5%88%97%E8%A1%A8&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2675380576%7D">权限列表</a>，这个列表里记录了用户/角色对于资源的操作权限，当需要访问这些资源时，会首先检查<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2675380576%7D">访问控制列表</a>中是否存在当前用户/角色的访问权限，如果存在，允许相应的操作，否则就拒绝相应的操作。</p>
+<p>优势：</p>
+<ul>
+<li>实施简单</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>一旦要修改安全策略或者需要审计，就意味着需要遍历大量的资源；</li>
+<li>应用开发者必须保证所有的资源在创建出来开始就有合适的保护措施。</li>
+</ul>
+<h4 id="基于角色的访问控制"><a href="#基于角色的访问控制" class="headerlink" title="基于角色的访问控制"></a>基于角色的访问控制</h4><p>RBAC (Role-Based Access Control)，基于角色的访问控制。定义了一系列的角色与权限之间的关系。</p>
+<p>基于角色的访问控制，应用特别广泛。它是防止权限泛滥，实现<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%9C%80%E5%B0%8F%E7%89%B9%E6%9D%83%E5%8E%9F%E5%88%99&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2675380576%7D">最小特权原则</a>的经典解决方案。RBAC 将用户按角色分类，通过用户的角色来确定用户对某项资源是否具备操作权限，它简化了用户与权限的管理，将用户与角色关联，角色与权限关联，然后权限与资源关联。</p>
+<p>RBAC三要素：</p>
+<ul>
+<li>用户：系统使用者对应的用户</li>
+<li>角色：一组权限的集合（如：管理员，普通用户等）</li>
+<li>权限：菜单，按钮，数据的增删改查等详细权限</li>
+</ul>
+<p>在RBAC中，权限与角色相关联，用户通过成为适当角色的成员而得到这些角色的权限。角色是为了分配多种权限而创建的，用户则依据它的责任和资格来被分配相应的角色。角色可依新的需求和系统的合并而赋予新的权限，而权限也可根据需要而从某角色中回收。角色与角色的关系同样也存在继承关系防止越权。</p>
+<p>优势：</p>
+<ul>
+<li>比 ACL 更具<strong>扩展性</strong></li>
+<li>在<strong>粗粒度的访问控制</strong>中工作得特别好 比如这样的场景：拥有经理角色的用户可以批准采购单。</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>随着组织的演进，往往出现角色爆炸的现象； 比如在一开始，一个销售的角色可以访问客户记录，这很合理。随着组织的扩张，开始组建按地域划分的销售团队，于是对客户记录的访问也需要按照地域来进行限制，这就导致系统中分别增加了美洲区的销售角色和亚太区的销售角色。</li>
+<li>当管理员更新用户的权限时，需要大量的手工操作；</li>
+<li><strong>做不到细粒度的访问控制</strong>； 比如这样的场景就做不到：经理只能批准其部门产生的采购单。 为了解决这种场景下的问题，应用开发者需要在应用里写额外的代码来做相应的检查，这导致了一个访问控制被分别定义在了两个不同的地方。从而导致了<ul>
+<li>安全管理成本变高</li>
+<li>合规和审计变得困难</li>
+<li>安全策略缺少单一视图</li>
+</ul>
+</li>
+<li><strong>资源与角色紧藕合</strong>，改一个角色会影响多个资源</li>
+</ul>
+<h4 id="基于分组的访问控制"><a href="#基于分组的访问控制" class="headerlink" title="基于分组的访问控制"></a>基于分组的访问控制</h4><p>GBAC (Group-Based Access Control)，基于分组的访问控制。可以维护具有层级关系的群组权限。</p>
+<p>基于群组的访问控制机制。看上去和 RBAC 很像，但是 GBAC 可以用来对一个或多个具有层级关系的群组来定义访问资源的权限。它允许将某个群组的访问权限继承到其下级群组中，当然，也可以选择不去继承。</p>
+<p>优势：</p>
+<ul>
+<li>适用于有组织结构的系统</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>同RBAC</li>
+<li>如果组织结构维护在多个系统，容易造成组织结构维护困难</li>
+</ul>
+<h4 id="自主访问控制"><a href="#自主访问控制" class="headerlink" title="自主访问控制"></a>自主访问控制</h4><p>DAC (Discretionary Access Control)，<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%87%AA%E4%B8%BB%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2675380576%7D">自主访问控制</a>。让资源（客体）所有者来定义访问控制规则。</p>
+<p>自主访问控制，让客体（资源）的所有者来定义访问控制规则。它是 Trusted Computer System Evaluation Criteria （TCSEC）定义的和一种访问控制机制，在 DAC 中，系统会根据被操作对象的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2675380576%7D">权限控制</a>列表中的信息，来决定当前用户能够对其进行哪些操作，用户可以将其具备权限直接或者间接授予其他用户（类似于网盘的分享，将文件的获取权限传递）。</p>
+<p>优势：</p>
+<ul>
+<li>灵活</li>
+<li>维护成本低</li>
+<li>降低了管理员的工作难度</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>增强了整体访问控制监管的难度</li>
+<li>安全性没有保证，完全取决于所有者的个人安全意识</li>
+</ul>
+<h4 id="强制访控制"><a href="#强制访控制" class="headerlink" title="强制访控制"></a>强制访控制</h4><p>MAC (Mandatory Access Control)，<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%BC%BA%E5%88%B6%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:2675380576%7D">强制访问控制</a>。基于安全级别标签的访问控制策略，其安全性最高。</p>
+<p>强制访问控制，通过定义安全级别标签来进行访问控制，也叫非自主访问控制，它可以限制主体对资源（客体）执行某种操作。它的安全策略由安全策略管理员集中控制，用户无权覆盖策略。比如为了保证机密性，MAC 不允许低级别的主体读取高级别的客体、不允许高级别的主体写入低级别的客体；为了保证完整性，MAC 不允许高级别的主体读取低级别的客体，不允许低级别的主体写入高级别的客体。一般普通公司不会采取 MAC，除非有相应的合规要求。</p>
+<p>优势：</p>
+<ul>
+<li>相当的安全</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>对实施要求很高</li>
+<li>需要对所有数据进行标记</li>
+</ul>
+<h4 id="基于声明的访问控制"><a href="#基于声明的访问控制" class="headerlink" title="基于声明的访问控制"></a>基于声明的访问控制</h4><p>Claims as Permissions，基于声明的访问控制。很多企业或组织都在某种形式上使用了这种机制。</p>
+<p>基于声明式的权限管理，以声明的方式赋予用户指定的权限。这常常和 RBAC 结合使用，以弥补 RBAC 在细粒度的访问控制中的不足（给RBAC的权限管理打补丁）。</p>
+<p>优势：</p>
+<ul>
+<li>自由度高</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>难以审计</li>
+<li>难以验证正常的人拥有正确的权限</li>
+<li>需要重新变动人员组织和责任时，需要手动流程</li>
+<li>管理员倾向于添加越来越多的权限，但很少移除它们</li>
+<li>决策数据定义在安全系统中，又被复制到其他的系统中，容易导致不一致发生</li>
+<li>对于采用了 OAuth 或者 OpenID 单点登录的方案，在用户的令牌中携带全量用户权限，容易出现体积非常大的访问令牌</li>
+<li>在用户身份声明中携带权限信息，导致认证和授权含混在一起</li>
+</ul>
+<h4 id="基于属性的访问控制策略"><a href="#基于属性的访问控制策略" class="headerlink" title="基于属性的访问控制策略"></a>基于属性的访问控制策略</h4><p>ABAC (Attribute-Based Access Control policy)，基于属性的访问控制策略。</p>
+<p>它是基于属性的访问控制，有时也被称为 PBAC (Policy-Based Access Control)。它不给用户直接赋予访问权限，而是通过执行一系列的布尔规则来为资源授权（动态计算一个或者一组属性是否满足某一条件来进行授权）。ABAC 中一般来说包含用户属性、环境属性、操作属性以及资源属性。</p>
+<ul>
+<li>Subject （访问实体）<ul>
+<li>人员，真实员工访问，匹配的可能是员工的工号、隶属的部门，职级等</li>
+<li>非人类，例如自动运行的程序，甚至是智能机器人访问，匹配的可能是程序ID，机器人编号等</li>
+</ul>
+</li>
+<li>Object（访问的目标资源）<ul>
+<li>文件</li>
+<li>机器或者设备</li>
+<li>数据库</li>
+<li>等等</li>
+</ul>
+</li>
+<li>Operation（要进行的操作）<ul>
+<li>Read</li>
+<li>Write</li>
+<li>Delete</li>
+<li>So on</li>
+</ul>
+</li>
+<li>Environment Conditions（环境条件）<ul>
+<li>访问时间</li>
+<li>访问位置（网络地址、物理地址等）</li>
+<li>风险等级（类比于本地的是否安全）</li>
+<li>等等</li>
+</ul>
+</li>
+<li>Policy（实行的策略）</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>能够地从组织内部自然获取到的信息来做访问控制决策</li>
+<li>没有额外的管理成本</li>
+<li>可以在不需要部署应用的情况下更改这个决策</li>
+<li>所有的利益相关者都能阅读</li>
+<li>易于审计</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>比较复杂</li>
+<li>实施难度较大</li>
+</ul>
+<h4 id="RBAC和ABAC比较"><a href="#RBAC和ABAC比较" class="headerlink" title="RBAC和ABAC比较"></a>RBAC和ABAC比较</h4><p>ACL和RBAC可以说是最常用的访问控制模型了，企业内部系统更多使用的是RBAC。在此比较一下传统的RBAC和较为新颖的ABAC模型。</p>
+<p>ABAC的优势：</p>
+<ul>
+<li>对于大型组织，基于RBAC的控制模型需要维护大量的角色和授权关系，相比而言，ABAC更加灵活；</li>
+<li>新增资源时，ABAC仅需要维护较少的资源，而RBAC需要维护所有相关的角色，ABAC可扩展性更强、更方便。</li>
+<li>ABAC支持带有动态参数的授权规则，RBAC只能基于静态的参数进行判断。</li>
+<li>ABAC权限控制的粒度比RBAC更细。</li>
+</ul>
+<p>RBAC的优势：</p>
+<ul>
+<li>对于中小型组织，维护角色和授权关系的工作量不大，反而定制各种策略相对麻烦，更容易接受RBAC授权模型。</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>本文参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/30472376/answer/2675380576?utm_campaign=&utm_medium=social&utm_oi=1058801297179852800&utm_psn=1572359038230269952&utm_source=qq">基于角色的访问控制? - 知乎</a></li>
+<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/174235.html">基于属性的访问控制(ABAC)</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Marx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.xuyicheng.top/2023-01-08-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B%E6%B5%85%E6%9E%90.html">https://blog.xuyicheng.top/2023-01-08-访问控制模型浅析.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.xuyicheng.top" target="_blank">徐年の博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B/">访问控制模型</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023-01-08-Markdown%E5%85%A5%E9%97%A8.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Markdown入门</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://pool-1305119010.cos.ap-nanjing.myqcloud.com/images/blog_images/me.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Marx</div><div class="author-info__description">一个普通男孩的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">259</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">85</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhoushing"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:zh.shing@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">正在每天努力加油，文章主要是个人心得、学习笔记以及很多算法题解，发现错误欢迎邮件指正，不胜感激</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="toc-number">2.</span> <span class="toc-text">认证与授权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81"><span class="toc-number">2.1.</span> <span class="toc-text">认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%88%E6%9D%83-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-number">2.2.</span> <span class="toc-text">授权&#x2F;访问控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.3.</span> <span class="toc-text">访问控制模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8"><span class="toc-number">2.3.1.</span> <span class="toc-text">访问控制列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%A7%92%E8%89%B2%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-number">2.3.2.</span> <span class="toc-text">基于角色的访问控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E7%BB%84%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-number">2.3.3.</span> <span class="toc-text">基于分组的访问控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E4%B8%BB%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-number">2.3.4.</span> <span class="toc-text">自主访问控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E8%AE%BF%E6%8E%A7%E5%88%B6"><span class="toc-number">2.3.5.</span> <span class="toc-text">强制访控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%A3%B0%E6%98%8E%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-number">2.3.6.</span> <span class="toc-text">基于声明的访问控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%B1%9E%E6%80%A7%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E7%AD%96%E7%95%A5"><span class="toc-number">2.3.7.</span> <span class="toc-text">基于属性的访问控制策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RBAC%E5%92%8CABAC%E6%AF%94%E8%BE%83"><span class="toc-number">2.3.8.</span> <span class="toc-text">RBAC和ABAC比较</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023-01-08-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B%E6%B5%85%E6%9E%90.html" title="访问控制模型浅析"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/17/ywnRKDrhGjCeEao.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="访问控制模型浅析"/></a><div class="content"><a class="title" href="/2023-01-08-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B%E6%B5%85%E6%9E%90.html" title="访问控制模型浅析">访问控制模型浅析</a><time datetime="2023-01-08T08:11:14.000Z" title="发表于 2023-01-08 16:11:14">2023-01-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023-01-08-Markdown%E5%85%A5%E9%97%A8.html" title="Markdown入门"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Markdown入门"/></a><div class="content"><a class="title" href="/2023-01-08-Markdown%E5%85%A5%E9%97%A8.html" title="Markdown入门">Markdown入门</a><time datetime="2023-01-08T07:43:57.000Z" title="发表于 2023-01-08 15:43:57">2023-01-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023-01-08-%E5%88%9D%E8%AF%86%E7%B1%BB%E5%9B%BE.html" title="初识类图"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/Hho324Ug9GxOtWk.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="初识类图"/></a><div class="content"><a class="title" href="/2023-01-08-%E5%88%9D%E8%AF%86%E7%B1%BB%E5%9B%BE.html" title="初识类图">初识类图</a><time datetime="2023-01-08T03:56:51.991Z" title="发表于 2023-01-08 11:56:51">2023-01-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023-01-08-%E5%88%9D%E8%AF%86MarkDown.html" title="初识Markdown"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/h5YJ2UvfwsrqFMC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="初识Markdown"/></a><div class="content"><a class="title" href="/2023-01-08-%E5%88%9D%E8%AF%86MarkDown.html" title="初识Markdown">初识Markdown</a><time datetime="2023-01-08T03:56:51.984Z" title="发表于 2023-01-08 11:56:51">2023-01-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022-05-10-Linux%E4%B8%8A%E7%9A%84springboot-vue%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2.html" title="Linux上的springboot+vue项目部署"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://i.loli.net/2020/12/20/h5YJ2UvfwsrqFMC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux上的springboot+vue项目部署"/></a><div class="content"><a class="title" href="/2022-05-10-Linux%E4%B8%8A%E7%9A%84springboot-vue%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2.html" title="Linux上的springboot+vue项目部署">Linux上的springboot+vue项目部署</a><time datetime="2022-05-10T06:11:13.000Z" title="发表于 2022-05-10 14:11:13">2022-05-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Marx</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://blog.xuyicheng.top/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,爱国,敬业,诚信,友善,自由,平等,公正,法治" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><!-- hexo injector body_end end --></body></html>
